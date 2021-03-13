@@ -3,8 +3,6 @@ package thread;
 import java.net.http.HttpResponse;
 import java.util.Map;
 
-import org.json.JSONObject;
-
 import com.github.underscore.lodash.U;
 
 import http.Http;
