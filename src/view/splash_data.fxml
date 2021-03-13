@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="406.0" prefWidth="916.0" style="-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SplashSelectController">
+   <children>
+      <ImageView fitHeight="211.0" fitWidth="565.0" layoutX="-57.0" layoutY="109.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/image/icons/easywatch.gif" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="116.0" fitWidth="112.0" layoutX="598.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/image/icons/spinner.gif" />
+         </image>
+      </ImageView>
+      <Label fx:id="labelInfo" layoutX="580.0" layoutY="101.0" prefHeight="17.0" prefWidth="140.0" text="Updating list..." textFill="WHITE" />
+   </children>
+</AnchorPane>
