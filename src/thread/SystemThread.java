@@ -50,8 +50,7 @@ public class SystemThread extends Thread {
 	public void run() {
 		while (true) {
 			try {
-
-				Thread.sleep(1);
+				Thread.sleep(100);
 
 				if (typeSelected == true) {
 
