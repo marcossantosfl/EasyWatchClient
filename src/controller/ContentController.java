@@ -1,19 +1,30 @@
 package controller;
 
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.jfoenix.controls.JFXButton;
 
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.DisplayMovie;
+import thread.SystemThread;
 
 public class ContentController {
 
@@ -21,49 +32,49 @@ public class ContentController {
 	AnchorPane anchorPane;
 
 	@FXML
-	Label label;
+	AnchorPane originalAnchor;
 
 	@FXML
-	Label movie01_grid_1;
+	Label label01_grid_1;
 
 	@FXML
-	Label movie02_grid_1;
+	Label label02_grid_1;
 
 	@FXML
-	Label movie03_grid_1;
+	Label label03_grid_1;
 
 	@FXML
-	Label movie04_grid_1;
+	Label label04_grid_1;
 
 	@FXML
-	Label movie05_grid_1;
+	Label label05_grid_1;
 
 	@FXML
-	Label movie06_grid_1;
+	Label label06_grid_1;
 
 	@FXML
-	Label movie07_grid_1;
+	Label label07_grid_1;
 
 	@FXML
-	Label movie01_grid_2;
+	Label label01_grid_2;
 
 	@FXML
-	Label movie02_grid_2;
+	Label label02_grid_2;
 
 	@FXML
-	Label movie03_grid_2;
+	Label label03_grid_2;
 
 	@FXML
-	Label movie04_grid_2;
+	Label label04_grid_2;
 
 	@FXML
-	Label movie05_grid_2;
+	Label label05_grid_2;
 
 	@FXML
-	Label movie06_grid_2;
+	Label label06_grid_2;
 
 	@FXML
-	Label movie07_grid_2;
+	Label label07_grid_2;
 
 	@FXML
 	Label title_grid_1;
@@ -148,7 +159,7 @@ public class ContentController {
 
 	@FXML
 	ImageView imageView07;
-	
+
 	@FXML
 	ImageView imageView01_2;
 
@@ -170,13 +181,13 @@ public class ContentController {
 	@FXML
 	ImageView imageView07_2;
 
-	ScaleTransition st = null;
+	@FXML
+	GridPane gridPane1;
 
 	private void scaleEffect(Node node, double scale) {
-		ScaleTransition st = new ScaleTransition(Duration.millis(300), node);
+		ScaleTransition st = new ScaleTransition(Duration.millis(01), node);
 		st.setByX(scale);
 		st.setByY(scale);
-		st.setAutoReverse(true);
 		st.play();
 	}
 
@@ -193,7 +204,7 @@ public class ContentController {
 			node.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent e) {
-					scaleEffect(node,scale);
+					scaleEffect(node, scale);
 				}
 
 			});
@@ -209,6 +220,54 @@ public class ContentController {
 		int medium = 20;
 		int small = 16;
 
+		if (SystemThread.displayType == 0) {
+			for (int i = 0; i < SystemThread.movieList.size(); i++) {
+				DisplayMovie dMovie = SystemThread.movieList.get(i);
+
+				if (dMovie.getIdCategory() == 1 || dMovie.getIdCategory() == 2) {
+					Label t = new Label("Adventure");
+					t.setAlignment(Pos.TOP_LEFT);
+					t.setTextFill(Color.WHITE);
+					t.setFont(font.getFontOpenSansRegular(big));
+					gridPane1.add(t,0,0);
+					Label l = new Label(dMovie.getNameContent());
+					l.setTextFill(Color.WHITE);
+					l.setFont(font.getFontOpenSansRegular(small));
+					AnchorPane p = new AnchorPane();
+					p.setLeftAnchor(l, 0.0);
+					p.setRightAnchor(l, 0.0);
+					l.setAlignment(Pos.CENTER);
+					p.setPrefWidth(270.0);
+					p.setPrefHeight(140.0);
+					ImageView v = new ImageView(new Image(
+							"file:///" + SystemThread.folder.getAbsolutePath() + "/image/" + dMovie.getImage() + ".jpg"));
+					v.setPickOnBounds(true);
+					v.setPreserveRatio(true);
+					v.setFitHeight(220.0);
+					v.setFitWidth(180.0);
+					// v.setLayoutX(15);
+					v.setLayoutY(30);
+					p.setLeftAnchor(v, 0.0);
+					p.setRightAnchor(v, 0.0);
+					JFXButton b = new JFXButton(String.valueOf(dMovie.getPrice()));
+					b.setFocusTraversable(false);
+					b.setPrefWidth(90.0);
+					b.setPrefHeight(30.0);
+					b.setTextFill(Color.WHITE);
+					p.setLeftAnchor(b, 0.0);
+					p.setRightAnchor(b, 0.0);
+					b.setAlignment(Pos.CENTER);
+					b.setLayoutY(270);
+					b.setFont(font.getFontOpenSansRegular(small));
+					p.getChildren().setAll(v, l, b);
+					gridPane1.add(p, 1 + i, 1);
+
+					this.scaleEffectApply(v, 0.1f, true);
+					this.scaleEffectApply(v, -0.1f, false);
+				}
+			}
+		}
+
 		buttonHome.setFocusTraversable(false);
 		buttonSearch.setFocusTraversable(false);
 		buttonPay.setFocusTraversable(false);
@@ -220,83 +279,6 @@ public class ContentController {
 		buttonPay.setFont(font.getFontOpenSansRegular(medium));
 		buttonDown.setFont(font.getFontOpenSansRegular(medium));
 		buttonClose.setFont(font.getFontOpenSansRegular(medium));
-
-		title_grid_1.setFont(font.getFontOpenSansRegular(big));
-		title_grid_2.setFont(font.getFontOpenSansRegular(big));
-
-		movie01_grid_1.setFont(font.getFontOpenSansRegular(small));
-		movie02_grid_1.setFont(font.getFontOpenSansRegular(small));
-		movie03_grid_1.setFont(font.getFontOpenSansRegular(small));
-		movie04_grid_1.setFont(font.getFontOpenSansRegular(small));
-		movie05_grid_1.setFont(font.getFontOpenSansRegular(small));
-		movie06_grid_1.setFont(font.getFontOpenSansRegular(small));
-		movie07_grid_1.setFont(font.getFontOpenSansRegular(small));
-
-		movie01_grid_2.setFont(font.getFontOpenSansRegular(small));
-		movie02_grid_2.setFont(font.getFontOpenSansRegular(small));
-		movie03_grid_2.setFont(font.getFontOpenSansRegular(small));
-		movie04_grid_2.setFont(font.getFontOpenSansRegular(small));
-		movie05_grid_2.setFont(font.getFontOpenSansRegular(small));
-		movie06_grid_2.setFont(font.getFontOpenSansRegular(small));
-		movie07_grid_2.setFont(font.getFontOpenSansRegular(small));
-
-		price01_grid_1.setFont(font.getFontOpenSansRegular(small));
-		price02_grid_1.setFont(font.getFontOpenSansRegular(small));
-		price03_grid_1.setFont(font.getFontOpenSansRegular(small));
-		price04_grid_1.setFont(font.getFontOpenSansRegular(small));
-		price05_grid_1.setFont(font.getFontOpenSansRegular(small));
-		price06_grid_1.setFont(font.getFontOpenSansRegular(small));
-		price07_grid_1.setFont(font.getFontOpenSansRegular(small));
-
-		price01_grid_2.setFont(font.getFontOpenSansRegular(small));
-		price02_grid_2.setFont(font.getFontOpenSansRegular(small));
-		price03_grid_2.setFont(font.getFontOpenSansRegular(small));
-		price04_grid_2.setFont(font.getFontOpenSansRegular(small));
-		price05_grid_2.setFont(font.getFontOpenSansRegular(small));
-		price06_grid_2.setFont(font.getFontOpenSansRegular(small));
-		price07_grid_2.setFont(font.getFontOpenSansRegular(small));
-
-		this.scaleEffectApply((Node)imageView01, 0.1f,true);
-		this.scaleEffectApply((Node)imageView01, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView02, 0.1f,true);
-		this.scaleEffectApply((Node)imageView02, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView03, 0.1f,true);
-		this.scaleEffectApply((Node)imageView03, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView04, 0.1f,true);
-		this.scaleEffectApply((Node)imageView04, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView05, 0.1f,true);
-		this.scaleEffectApply((Node)imageView05, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView06, 0.1f,true);
-		this.scaleEffectApply((Node)imageView06, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView07, 0.1f,true);
-		this.scaleEffectApply((Node)imageView07, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView01_2, 0.1f,true);
-		this.scaleEffectApply((Node)imageView01_2, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView02_2, 0.1f,true);
-		this.scaleEffectApply((Node)imageView02_2, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView03_2, 0.1f,true);
-		this.scaleEffectApply((Node)imageView03_2, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView04_2, 0.1f,true);
-		this.scaleEffectApply((Node)imageView04_2, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView05_2, 0.1f,true);
-		this.scaleEffectApply((Node)imageView05_2, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView06_2, 0.1f,true);
-		this.scaleEffectApply((Node)imageView06_2, -0.1f,false);
-		
-		this.scaleEffectApply((Node)imageView07_2, 0.1f,true);
-		this.scaleEffectApply((Node)imageView07_2, -0.1f,false);
 
 	}
 

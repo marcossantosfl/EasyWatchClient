@@ -162,6 +162,7 @@ public class SelectController {
 	@FXML
 	protected void handleMovieButtonAction(ActionEvent event) throws IOException {
 		
+		SystemThread.typeSelected = true;
 		this.goToScreen("/view/splash_data.fxml", "Movies");
 	}
 	

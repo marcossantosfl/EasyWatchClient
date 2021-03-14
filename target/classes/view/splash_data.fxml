@@ -12,11 +12,11 @@
             <Image url="/image/icons/easywatch.gif" />
          </image>
       </ImageView>
-      <ImageView fitHeight="116.0" fitWidth="112.0" layoutX="598.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true">
+     <ImageView fitHeight="148.0" fitWidth="187.0" layoutX="663.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="/image/icons/spinner.gif" />
          </image>
       </ImageView>
-      <Label fx:id="labelInfo" layoutX="580.0" layoutY="101.0" prefHeight="17.0" prefWidth="140.0" text="Updating list..." textFill="WHITE" />
+      <Label fx:id="labelUpdate" layoutX="640.0" layoutY="306.0" prefHeight="20.0" prefWidth="250.0" textFill="WHITE" />
    </children>
 </AnchorPane>

@@ -18,22 +18,34 @@ import thread.SystemThread;
 public class SplashSelectController {
 	
 	@FXML
-	Label labelInfo;
+	Label labelUpdate;
 
 	/*
 	 * Simple animation in thread.
 	 */
 	public class ImageAnimation extends Thread {
 
+		boolean executed = false;
+		
 		public void run() {
-			boolean executed = false;
 			while (true) {
-				
-				if (!executed) {
-					executed = true;
-					try {
-						SystemThread.sleep(3000L);
+				if(executed == true)
+				{
+					this.interrupt();
+					break;
+				}
+				try {
+					Thread.sleep(100L);
+					
+					if(SystemThread.isBeingDownloaded == 1)
+					{
+						Platform.runLater(() -> {
+					labelUpdate.setText("Files: "+SystemThread.totalDownload+": Downloading: "+String.valueOf(SystemThread.downloaded)+"%");
+						});
+					}
 
+					if (SystemThread.isBeingDownloaded == 2) {
+						SystemThread.isBeingDownloaded = 0;
 						Platform.runLater(() -> {
 							Parent root = null;
 							try {
@@ -53,29 +65,29 @@ public class SplashSelectController {
 							quarterStage.setScene(scene1);
 							SystemThread.thirdStage.hide();
 							quarterStage.show();
+							executed = true;
 						});
-
-					} catch (InterruptedException e) {
-						e.printStackTrace();
 					}
+
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-				
-				this.interrupt();
 			}
 		}
 	}
-	
+
 	/*
 	 * Initialize everything before the screen itself.
 	 */
 	@FXML
 	protected void initialize() {
+
 		new ImageAnimation().start();
-		
+
 		FontController font = new FontController();
-		
+
 		int size = 18;
 		
-		labelInfo.setFont(font.getFontOpenSansRegular(size));
+		labelUpdate.setFont(font.getFontOpenSansRegular(size));
 	}
 }
