@@ -41,10 +41,10 @@ public class SelectController {
 	AnchorPane anchorPaneSerie;
 
 	@FXML
-	JFXButton buttonMovie;
+	ImageView imageMovie;
 
 	@FXML
-	JFXButton buttonSerie;
+	ImageView imageSerie;
 	
 	@FXML
 	JFXButton buttonWindowDown;
@@ -86,20 +86,17 @@ public class SelectController {
 		
 		int size = 24;
 		
-		buttonMovie.setFont(font.getFontOpenSansBold(size));
-		buttonSerie.setFont(font.getFontOpenSansBold(size));
 		buttonWindowDown.setFont(font.getFontOpenSansBold(size));
 		buttonWindowClose.setFont(font.getFontOpenSansBold(size));
 		
-		buttonMovie.setFocusTraversable(false);
-		buttonSerie.setFocusTraversable(false);
 		buttonWindowDown.setFocusTraversable(false);
 		buttonWindowClose.setFocusTraversable(false);
 		
-		buttonMovie.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+		anchorPaneMovie.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
-				anchorPaneMovie.setStyle("-fx-background-color: #000000; -fx-background-radius: 100 100 100 100;");
+				SystemThread.typeSelected = true;
+				goToScreen("/view/splash_data.fxml", "Movies");
 			}
 		});
 		anchorPaneMovie.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
@@ -108,40 +105,29 @@ public class SelectController {
 				anchorPaneMovie.setStyle("-fx-background-color: #000000; -fx-background-radius: 100 100 100 100;");
 			}
 		});
-		buttonMovie.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				anchorPaneMovie.setStyle("-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 100 100 100 100;");
-			}
-		});
 		anchorPaneMovie.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
 				anchorPaneMovie.setStyle("-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 100 100 100 100;");
 			}
 		});
-		buttonSerie.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				anchorPaneSerie.setStyle("-fx-background-color: #000000; -fx-background-radius: 100 100 100 100;");
-			}
-		});	
 		anchorPaneSerie.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
 				anchorPaneSerie.setStyle("-fx-background-color: #000000; -fx-background-radius: 100 100 100 100;");
 			}
 		});
-		buttonSerie.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+		anchorPaneSerie.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
 				anchorPaneSerie.setStyle("-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 100 100 100 100;");
 			}
 		});
-		anchorPaneSerie.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+		anchorPaneSerie.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
-				anchorPaneSerie.setStyle("-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 100 100 100 100;");
+				SystemThread.typeSelected = true;
+				goToScreen("/view/splash_data.fxml", "Serie");
 			}
 		});
 	}
@@ -156,21 +142,6 @@ public class SelectController {
 	@FXML
 	protected void handleCloseButtonAction(ActionEvent event) {
 		System.exit(1);
-	}
-	
-	
-	@FXML
-	protected void handleMovieButtonAction(ActionEvent event) throws IOException {
-		
-		SystemThread.typeSelected = true;
-		this.goToScreen("/view/splash_data.fxml", "Movies");
-	}
-	
-	@FXML
-	protected void handleSerieButtonAction(ActionEvent event) throws IOException {
-		
-		this.goToScreen("/view/splash_data.fxml", "Series");
-		
 	}
 
 }

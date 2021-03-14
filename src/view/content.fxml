@@ -77,18 +77,6 @@
           <RowConstraints maxHeight="280.0" minHeight="10.0" prefHeight="280.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="280.0" minHeight="10.0" prefHeight="280.0" vgrow="SOMETIMES" />
         </rowConstraints>
-         <children>
-            <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
-               <image>
-                  <Image url="/image/icons/left.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.rowIndex="1">
-               <image>
-                  <Image url="/image/icons/right.png" />
-               </image>
-            </ImageView>
-         </children>
       </GridPane>
       <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="828.0" layoutY="956.0" pickOnBounds="true" preserveRatio="true">
          <image>

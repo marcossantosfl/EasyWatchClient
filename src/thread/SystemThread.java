@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.http.HttpResponse;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.github.underscore.lodash.U;
@@ -55,78 +57,100 @@ public class SystemThread extends Thread {
 
 					Http http = new Http();
 
-					if (http.fileDownloaded() == true) {
+					try {
+						if (http.fileDownloaded() == true) {
 
-						org.json.simple.JSONObject jsonObject = jsonFileArray();
+							org.json.simple.JSONObject jsonObject = jsonFileArray();
 
-						JSONArray data_array = new JSONObject(jsonObject).getJSONArray("display");
+							JSONArray data_array = new JSONObject(jsonObject).getJSONArray("display");
 
-						System.out.println(data_array);
+							downloadTotal(data_array);
 
-						for (int i = 0; i < data_array.length(); i++) {
+							for (int i = 0; i < data_array.length(); i++) {
 
-							JSONObject json_row = data_array.getJSONObject(i);
-							if (new File(folder.getAbsolutePath() + "/image/" + json_row.getString("image") + ".jpg")
-									.isFile() == false) {
-								totalDownload++;
-							}
-						}
+								JSONObject json_row = data_array.getJSONObject(i);
 
-						for (int i = 0; i < data_array.length(); i++) {
-
-							JSONObject json_row = data_array.getJSONObject(i);
-
-							if (json_row.getInt("type") == 0) {
-								DisplayMovie dMovie = new DisplayMovie();
-								dMovie.setIdDisplay(json_row.getInt("idDisplay"));
-								dMovie.setNameContent(json_row.getString("nameContent"));
-								dMovie.setIdCategory(json_row.getInt("idCategory"));
-								dMovie.setImage(json_row.getString("image"));
-								dMovie.setPrice(json_row.getDouble("price"));
-								dMovie.setAvailable(json_row.getInt("available"));
-								movieList.add(dMovie);
-								displayType = 0;
-								if (new File(
-										folder.getAbsolutePath() + "/image/" + json_row.getString("image") + ".jpg")
-												.isFile() == false) {
-
-									URL url = new URL("https://marcossan.dev/test/images/" + json_row.getString("image")
-											+ ".jpg");
-									URLConnection con = url.openConnection();
-									InputStream is = url.openStream();
-									OutputStream os = new FileOutputStream(folder.getAbsolutePath() + "/image/"
-											+ json_row.getString("image") + ".jpg");
-
-									byte[] b = new byte[2048];
-									int length;
-
-									int downloaded_data = 0;
-									while ((length = is.read(b)) != -1) {
+								if (json_row.getInt("type") == 0) {
+									DisplayMovie dMovie = new DisplayMovie();
+									dMovie.setIdDisplay(json_row.getInt("idDisplay"));
+									dMovie.setNameContent(json_row.getString("nameContent"));
+									dMovie.setIdCategory(json_row.getInt("idCategory"));
+									dMovie.setImage(json_row.getString("image"));
+									dMovie.setPrice(json_row.getDouble("price"));
+									dMovie.setAvailable(json_row.getInt("available"));
+									movieList.add(dMovie);
+									displayType = 0;
+									try {
+										downloadImage(json_row);
+									} catch (IOException e) {
 										isBeingDownloaded = 1;
-										os.write(b, 0, length);
-										downloaded_data += length;
-										downloaded = (int) ((downloaded_data * 100) / (con.getContentLength() * 1.0));
+										System.out.println("Download failed: "+json_row.getString("image"));
 									}
-
-									totalDownload--;
-									is.close();
-									os.close();
 								}
 							}
+							
+							isBeingDownloaded = 3;
 						}
-						isBeingDownloaded = 2;
+					} catch (IOException e) {
+						isBeingDownloaded = -1;
+						System.out.println("Download JSON failed!");
+
 					}
 					typeSelected = false;
 				}
 
-			} catch (InterruptedException | IOException e) {
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (ParseException e) {
+
+			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
+
+	private void downloadImage(JSONObject json_row) throws MalformedURLException, IOException, FileNotFoundException {
+		if (new File(
+				folder.getAbsolutePath() + "/image/" + json_row.getString("image") + ".jpg")
+						.isFile() == false) {
+
+			URL url = new URL("https://marcossan.dev/test/images/" + json_row.getString("image")
+					+ ".jpg");
+			URLConnection con = url.openConnection();
+			InputStream is = url.openStream();
+			OutputStream os = new FileOutputStream(folder.getAbsolutePath() + "/image/"
+					+ json_row.getString("image") + ".jpg");
+
+			byte[] b = new byte[2048];
+			int length;
+
+			int downloaded_data = 0;
+			while ((length = is.read(b)) != -1) {
+				isBeingDownloaded = 2;
+				os.write(b, 0, length);
+				downloaded_data += length;
+				downloaded = (int) ((downloaded_data * 100) / (con.getContentLength() * 1.0));
+			}
+
+			totalDownload--;
+			is.close();
+			os.close();
+	
+		}
+	}
+
+	private void downloadTotal(JSONArray data_array) {
+		for (int i = 0; i < data_array.length(); i++) {
+
+			JSONObject json_row = data_array.getJSONObject(i);
+			if (new File(folder.getAbsolutePath() + "/image/" + json_row.getString("image") + ".jpg")
+					.isFile() == false) {
+				totalDownload++;
+			}
+		}
+	}
+
 
 	private org.json.simple.JSONObject jsonFileArray() throws IOException, ParseException, FileNotFoundException {
 		JSONParser parser = new JSONParser();

@@ -16,7 +16,7 @@ import javafx.stage.StageStyle;
 import thread.SystemThread;
 
 public class SplashSelectController {
-	
+
 	@FXML
 	Label labelUpdate;
 
@@ -26,25 +26,33 @@ public class SplashSelectController {
 	public class ImageAnimation extends Thread {
 
 		boolean executed = false;
-		
+
 		public void run() {
 			while (true) {
-				if(executed == true)
-				{
+				if (executed == true) {
 					this.interrupt();
 					break;
 				}
 				try {
-					Thread.sleep(100L);
-					
-					if(SystemThread.isBeingDownloaded == 1)
-					{
-						Platform.runLater(() -> {
-					labelUpdate.setText("Files: "+SystemThread.totalDownload+": Downloading: "+String.valueOf(SystemThread.downloaded)+"%");
-						});
-					}
+					Thread.sleep(2000L);
 
-					if (SystemThread.isBeingDownloaded == 2) {
+					if (SystemThread.isBeingDownloaded == 1) {
+						Platform.runLater(() -> {
+							labelUpdate.setText("Image download failed!");
+						});
+					} else if (SystemThread.isBeingDownloaded == -1) {
+						Platform.runLater(() -> {
+							labelUpdate.setText("Data download failed!");
+						});
+					} else if (SystemThread.isBeingDownloaded == 2) {
+
+						Platform.runLater(() -> {
+							labelUpdate.setText("Files: " + SystemThread.totalDownload + ": Downloading: "
+									+ String.valueOf(SystemThread.downloaded) + "%");
+						});
+
+					}
+					else if (SystemThread.isBeingDownloaded == 3) {
 						SystemThread.isBeingDownloaded = 0;
 						Platform.runLater(() -> {
 							Parent root = null;
@@ -87,7 +95,7 @@ public class SplashSelectController {
 		FontController font = new FontController();
 
 		int size = 18;
-		
+
 		labelUpdate.setFont(font.getFontOpenSansRegular(size));
 	}
 }
