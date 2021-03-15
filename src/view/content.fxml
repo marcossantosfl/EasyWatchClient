@@ -61,47 +61,15 @@
          </children>
       </AnchorPane>
       <GridPane fx:id="gridPane1" layoutX="183.0" layoutY="195.0" prefHeight="344.0" prefWidth="1401.0" style="-fx-hgap: 30;">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="280.0" minHeight="10.0" prefHeight="280.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="280.0" minHeight="10.0" prefHeight="280.0" vgrow="SOMETIMES" />
-        </rowConstraints>
       </GridPane>
       <GridPane fx:id="gridPane2" layoutX="183.0" layoutY="557.0" prefHeight="344.0" prefWidth="1401.0" style="-fx-hgap: 30;">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="490.0" minWidth="10.0" prefWidth="212.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="280.0" minHeight="10.0" prefHeight="280.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="280.0" minHeight="10.0" prefHeight="280.0" vgrow="SOMETIMES" />
-        </rowConstraints>
       </GridPane>
-      <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="828.0" layoutY="956.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="arrowDownImg" fitHeight="80.0" fitWidth="80.0" layoutX="828.0" layoutY="956.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="/image/icons/down.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="828.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="arrowUpImg" fitHeight="80.0" fitWidth="80.0" layoutX="828.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="/image/icons/up.png" />
          </image>

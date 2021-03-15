@@ -51,6 +51,12 @@ public class ContentController {
 	GridPane gridPane2;
 
 	@FXML
+	ImageView arrowDownImg;
+
+	@FXML
+	ImageView arrowUpImg;
+
+	@FXML
 	private List<Label> labelList1 = new ArrayList<Label>();
 
 	@FXML
@@ -68,8 +74,19 @@ public class ContentController {
 	@FXML
 	private List<JFXButton> buttonList2 = new ArrayList<JFXButton>();
 
-	private int clickArrowSide1 = 1;
-	private int clickArrowSide2 = 1;
+	@FXML
+	private List<ImageView> arrowList1 = new ArrayList<ImageView>();
+
+	@FXML
+	private List<ImageView> arrowList2 = new ArrayList<ImageView>();
+
+	private int clickArrowSide1 = 0;
+	private int clickArrowSide2 = 0;
+
+	private int category1 = 1;
+	private int category2 = 2;
+
+	private int gridClick = 0;
 
 	private void scaleEffect(Node node, double scale) {
 		ScaleTransition st = new ScaleTransition(Duration.millis(01), node);
@@ -103,6 +120,20 @@ public class ContentController {
 
 		FontController font = new FontController();
 
+		arrowUpImg.setVisible(false);
+
+		boolean hasCategory = false;
+
+		for (int r = 0; r < 10; r++) {
+			if (categoryTotal(category2 + r) > 0) {
+				hasCategory = true;
+			}
+		}
+
+		if (hasCategory != true) {
+			arrowDownImg.setVisible(false);
+		}
+
 		int big = 24;
 		int medium = 20;
 		int small = 16;
@@ -133,6 +164,237 @@ public class ContentController {
 			arrowCategory(gridPane2, labelList2, imageList2, buttonList2, 2);
 		}
 
+		arrowDownImg.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent e) {
+				
+				clickArrowSide1 = 0;
+				clickArrowSide2 = 0;
+
+				List<Integer> intList1 = new ArrayList<Integer>();
+				List<Integer> intList2 = new ArrayList<Integer>();
+
+				category1++;
+				category2++;
+
+				int total1 = 0;
+				int total2 = 0;
+
+				for (int k = 0; k < SystemThread.movieList.size(); k++) {
+					DisplayMovie dMovie = SystemThread.movieList.get(k);
+					if (dMovie.getIdCategory() == category1) {
+						intList1.add(k);
+						total1++;
+					} else if (dMovie.getIdCategory() == category2) {
+						intList2.add(k);
+						total2++;
+					}
+				}
+
+				int i = 0;
+
+				for (int j = 0; j < total1; j++) {
+					DisplayMovie dMovie = SystemThread.movieList.get(intList1.get(j));
+					if (i < 7) {
+						buttonList1.get(i).setText(String.valueOf(dMovie.getPrice()));
+						labelList1.get(i).setText(String.valueOf(dMovie.getNameContent()));
+						imageList1.get(i).setImage(new Image("file:///" + SystemThread.folder.getAbsolutePath()
+								+ "/image/" + dMovie.getImage() + ".jpg"));
+						i++;
+					}
+				}
+
+				int y = 0;
+				for (int j = 0; j < total2; j++) {
+					DisplayMovie dMovie = SystemThread.movieList.get(intList2.get(j));
+					if (y < 7) {
+						buttonList2.get(y).setText(String.valueOf(dMovie.getPrice()));
+						labelList2.get(y).setText(String.valueOf(dMovie.getNameContent()));
+						imageList2.get(y).setImage(new Image("file:///" + SystemThread.folder.getAbsolutePath()
+								+ "/image/" + dMovie.getImage() + ".jpg"));
+						y++;
+					}
+				}
+
+				boolean hasCategory = false;
+
+				for (int r = 0; r < 10; r++) {
+					if (categoryTotal(category2 + r) > 0) {
+						hasCategory = true;
+					}
+				}
+
+				if (hasCategory == true) {
+					arrowDownImg.setVisible(false);
+					arrowUpImg.setVisible(true);
+				}
+
+				for (int z = 0; z < y; z++) {
+					buttonList2.get(z).setVisible(true);
+					labelList2.get(z).setVisible(true);
+					imageList2.get(z).setVisible(true);
+					if ((z + 1) == y) {
+						int l = (z + 1);
+						for (int w = l; w < 7; w++) {
+							buttonList2.get(w).setVisible(false);
+							labelList2.get(w).setVisible(false);
+							imageList2.get(w).setVisible(false);
+						}
+					}
+				}
+				
+				for (int z = 0; z < i; z++) {
+					buttonList1.get(z).setVisible(true);
+					labelList1.get(z).setVisible(true);
+					imageList1.get(z).setVisible(true);
+					if ((z + 1) == i) {
+						int l = (z + 1);
+						for (int w = l; w < 7; w++) {
+							buttonList1.get(w).setVisible(false);
+							labelList1.get(w).setVisible(false);
+							imageList1.get(w).setVisible(false);
+						}
+					}
+				}
+				
+				if(total1 > 7)
+				{
+					arrowList1.get(1).setVisible(false);
+				}
+				else
+				{
+					arrowList1.get(1).setVisible(true);
+				}
+				
+				if(total2 > 7)
+				{
+					arrowList1.get(0).setVisible(false);
+				}
+				else
+				{
+					arrowList1.get(0).setVisible(true);
+				}
+				
+
+				arrowList2.get(0).setVisible(false);
+				arrowList2.get(1).setVisible(false);
+
+			}
+		});
+		arrowUpImg.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent e) {
+
+				clickArrowSide1 = 0;
+				clickArrowSide2 = 0;
+				
+				if (!arrowDownImg.isVisible()) {
+					arrowDownImg.setVisible(true);
+				}
+
+				if (categoryTotal(category1 - 2) == 0) {
+					arrowUpImg.setVisible(false);
+				}
+
+				List<Integer> intList1 = new ArrayList<Integer>();
+				List<Integer> intList2 = new ArrayList<Integer>();
+
+				category1--;
+				category2--;
+
+				int total1 = 0;
+				int total2 = 0;
+
+				for (int k = 0; k < SystemThread.movieList.size(); k++) {
+					DisplayMovie dMovie = SystemThread.movieList.get(k);
+					if (dMovie.getIdCategory() == category1) {
+						intList1.add(k);
+						total1++;
+					} else if (dMovie.getIdCategory() == category2) {
+						intList2.add(k);
+						total2++;
+					}
+				}
+
+				int i = 0;
+
+				for (int j = 0; j < total1; j++) {
+					DisplayMovie dMovie = SystemThread.movieList.get(intList1.get(j));
+					if (i < 7) {
+						buttonList1.get(i).setText(String.valueOf(dMovie.getPrice()));
+						labelList1.get(i).setText(String.valueOf(dMovie.getNameContent()));
+						imageList1.get(i).setImage(new Image("file:///" + SystemThread.folder.getAbsolutePath()
+								+ "/image/" + dMovie.getImage() + ".jpg"));
+						i++;
+					}
+				}
+
+				int y = 0;
+				for (int j = 0; j < total2; j++) {
+					DisplayMovie dMovie = SystemThread.movieList.get(intList2.get(j));
+					if (y < 7) {
+						buttonList2.get(y).setText(String.valueOf(dMovie.getPrice()));
+						labelList2.get(y).setText(String.valueOf(dMovie.getNameContent()));
+						imageList2.get(y).setImage(new Image("file:///" + SystemThread.folder.getAbsolutePath()
+								+ "/image/" + dMovie.getImage() + ".jpg"));
+						y++;
+					}
+				}
+
+				for (int z = 0; z < y; z++) {
+					buttonList2.get(z).setVisible(true);
+					labelList2.get(z).setVisible(true);
+					imageList2.get(z).setVisible(true);
+					if ((z + 1) == y) {
+						int l = (z + 1);
+						for (int w = l; w < 7; w++) {
+							buttonList2.get(w).setVisible(false);
+							labelList2.get(w).setVisible(false);
+							imageList2.get(w).setVisible(false);
+						}
+					}
+				}
+				
+				for (int z = 0; z < i; z++) {
+					buttonList1.get(z).setVisible(true);
+					labelList1.get(z).setVisible(true);
+					imageList1.get(z).setVisible(true);
+					if ((z + 1) == i) {
+						int l = (z + 1);
+						for (int w = l; w < 7; w++) {
+							buttonList1.get(w).setVisible(false);
+							labelList1.get(w).setVisible(false);
+							imageList1.get(w).setVisible(false);
+						}
+					}
+				}
+				
+				if(total1 > 7)
+				{
+					arrowList1.get(1).setVisible(true);
+				}
+				else
+				{
+					arrowList1.get(1).setVisible(false);
+				}
+				
+				if(total2 > 7)
+				{
+					arrowList1.get(0).setVisible(true);
+				}
+				else
+				{
+					arrowList1.get(0).setVisible(false);
+				}
+				
+
+				arrowList2.get(0).setVisible(false);
+				arrowList2.get(1).setVisible(false);
+			}
+		});
+
 		buttonHome.setFocusTraversable(false);
 		buttonSearch.setFocusTraversable(false);
 		buttonPay.setFocusTraversable(false);
@@ -156,6 +418,7 @@ public class ContentController {
 			left.setFitHeight(80.0);
 			left.setFitWidth(80.0);
 			left.setVisible(false);
+			arrowList2.add(left);
 
 			ImageView right = new ImageView(new Image("/image/icons/right.png"));
 			right.setPickOnBounds(true);
@@ -163,12 +426,37 @@ public class ContentController {
 			right.setFitHeight(80.0);
 			right.setFitWidth(80.0);
 			right.setVisible(true);
+			arrowList1.add(right);
 
 			this.scaleEffectApply(right, 0.1f, true);
 			this.scaleEffectApply(right, -0.1f, false);
 
 			this.scaleEffectApply(left, 0.1f, true);
 			this.scaleEffectApply(left, -0.1f, false);
+
+			right.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle(MouseEvent e) {
+					if (arrowList1.get(0).equals(right)) {
+						gridClick = 1;
+					} else if (arrowList1.get(1).equals(right)) {
+						gridClick = 2;
+					}
+				}
+			});
+
+			left.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+
+				@Override
+				public void handle(MouseEvent e) {
+					if (arrowList2.get(0).equals(left)) {
+						gridClick = 1;
+					} else if (arrowList2.get(1).equals(left)) {
+						gridClick = 2;
+					}
+				}
+			});
 
 			right.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
@@ -178,48 +466,43 @@ public class ContentController {
 					left.setVisible(true);
 
 					List<Integer> intList1 = new ArrayList<Integer>();
-					List<Integer> intList2 = new ArrayList<Integer>();
+
+					int c = gridClick == 1 ? category1 : category2;
 
 					for (int k = 0; k < SystemThread.movieList.size(); k++) {
 						DisplayMovie dMovie = SystemThread.movieList.get(k);
-						if (dMovie.getIdCategory() == 1) {
+						if (dMovie.getIdCategory() == c) {
 							intList1.add(k);
-						} else if (dMovie.getIdCategory() == 2) {
-							intList2.add(k);
 						}
+					}
+
+					int clickArrowSide = 0;
+
+					if (gridClick == 1) {
+						clickArrowSide1++;
+						clickArrowSide = clickArrowSide1;
+					} else if (gridClick == 2) {
+						clickArrowSide2++;
+						clickArrowSide = clickArrowSide2;
+					}
+
+					if (categoryTotal(c) - clickArrowSide == 7) {
+						right.setVisible(false);
+						left.setVisible(true);
 					}
 
 					int i = 0;
 
-					int size = category == 1 ? intList1.size() : intList2.size();
-
-					int clickArrowSide = category == 1 ? clickArrowSide1 : clickArrowSide2;
-
-					int max = (clickArrowSide + 6) >= size ? 0 : size;
-
-					if (max != 0) {
-						for (int j = clickArrowSide; j < max; j++) {
-							DisplayMovie dMovie = SystemThread.movieList
-									.get(category == 1 ? intList1.get(j) : intList2.get(j));
-							if (i < 7) {
-								buttonList.get(i).setText(String.valueOf(dMovie.getPrice()));
-								labelList.get(i).setText(String.valueOf(dMovie.getNameContent()));
-								imageList.get(i).setImage(new Image("file:///" + SystemThread.folder.getAbsolutePath()
-										+ "/image/" + dMovie.getImage() + ".jpg"));
-								i++;
-							}
+					for (int j = clickArrowSide; j < intList1.size(); j++) {
+						DisplayMovie dMovie = SystemThread.movieList.get(intList1.get(j));
+						if (i < 7) {
+							buttonList.get(i).setText(String.valueOf(dMovie.getPrice()));
+							labelList.get(i).setText(String.valueOf(dMovie.getNameContent()));
+							imageList.get(i).setImage(new Image("file:///" + SystemThread.folder.getAbsolutePath()
+									+ "/image/" + dMovie.getImage() + ".jpg"));
+							i++;
 						}
 
-						if (category == 1) {
-							clickArrowSide1++;
-						}
-						if (category == 2) {
-							clickArrowSide2++;
-						}
-
-						if ((category == 1 ? clickArrowSide1 + 6 : clickArrowSide2 + 6) >= max) {
-							right.setVisible(false);
-						}
 					}
 
 				}
@@ -232,54 +515,45 @@ public class ContentController {
 					right.setVisible(true);
 
 					List<Integer> intList1 = new ArrayList<Integer>();
-					List<Integer> intList2 = new ArrayList<Integer>();
+
+					int c = gridClick == 1 ? category1 : category2;
 
 					for (int k = 0; k < SystemThread.movieList.size(); k++) {
 						DisplayMovie dMovie = SystemThread.movieList.get(k);
-						if (dMovie.getIdCategory() == 1) {
+
+						if (dMovie.getIdCategory() == c) {
 							intList1.add(k);
-						} else if (dMovie.getIdCategory() == 2) {
-							intList2.add(k);
 						}
+					}
+
+					int clickArrowSide = 0;
+
+					if (gridClick == 1) {
+						clickArrowSide1--;
+						clickArrowSide = clickArrowSide1;
+					} else if (gridClick == 2) {
+						clickArrowSide2--;
+						clickArrowSide = clickArrowSide2;
+					}
+
+					if (clickArrowSide == 0) {
+						right.setVisible(true);
+						left.setVisible(false);
 					}
 
 					int i = 0;
 
-					int size = category == 1 ? intList1.size() : intList2.size();
-
-					int clickArrowSide = category == 1 ? clickArrowSide1 : clickArrowSide2;
-
-					int max = (clickArrowSide - 6) >= size ? 0 : size;
-
-					if (max != 0) {
-						for (int j = clickArrowSide - 2; max > j; j++) {
-							if (j != -1) {
-								if (j == 0) {
-									left.setVisible(false);
-								}
-								DisplayMovie dMovie = SystemThread.movieList
-										.get(category == 1 ? intList1.get(j) : intList2.get(j));
-								if (i < 7) {
-									buttonList.get(i).setText(String.valueOf(dMovie.getPrice()));
-									labelList.get(i).setText(String.valueOf(dMovie.getNameContent()));
-									imageList.get(i)
-											.setImage(new Image("file:///" + SystemThread.folder.getAbsolutePath()
-													+ "/image/" + dMovie.getImage() + ".jpg"));
-									i++;
-								}
-
-							} else {
-
-							}
+					for (int j = clickArrowSide; j < intList1.size(); j++) {
+						DisplayMovie dMovie = SystemThread.movieList.get(intList1.get(j));
+						if (i < 7) {
+							buttonList.get(i).setText(String.valueOf(dMovie.getPrice()));
+							labelList.get(i).setText(String.valueOf(dMovie.getNameContent()));
+							imageList.get(i).setImage(new Image("file:///" + SystemThread.folder.getAbsolutePath()
+									+ "/image/" + dMovie.getImage() + ".jpg"));
+							i++;
 						}
-						if (category == 1) {
-							clickArrowSide1--;
-						}
-						if (category == 2) {
-							clickArrowSide2--;
-						}
+
 					}
-
 				}
 			});
 
@@ -294,6 +568,7 @@ public class ContentController {
 		Label t = new Label(categoryName);
 		t.setAlignment(Pos.TOP_LEFT);
 		t.setTextFill(Color.WHITE);
+		t.setPrefWidth(280.0);
 		t.setFont(font.getFontOpenSansRegular(big));
 		Label l = new Label(dMovie.getNameContent());
 		l.setTextFill(Color.WHITE);
