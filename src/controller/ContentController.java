@@ -21,6 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.Category;
 import model.DisplayMovie;
 import thread.SystemThread;
 
@@ -57,6 +58,9 @@ public class ContentController {
 	ImageView arrowUpImg;
 
 	@FXML
+	private List<Label> labelCategory = new ArrayList<Label>();
+
+	@FXML
 	private List<Label> labelList1 = new ArrayList<Label>();
 
 	@FXML
@@ -88,6 +92,8 @@ public class ContentController {
 
 	private int gridClick = 0;
 
+	private int jump = 2;
+
 	private void scaleEffect(Node node, double scale) {
 		ScaleTransition st = new ScaleTransition(Duration.millis(01), node);
 		st.setByX(scale);
@@ -106,6 +112,7 @@ public class ContentController {
 			});
 		} else {
 			node.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+
 				@Override
 				public void handle(MouseEvent e) {
 					scaleEffect(node, scale);
@@ -146,19 +153,37 @@ public class ContentController {
 				DisplayMovie dMovie = SystemThread.movieList.get(i);
 
 				if (dMovie.getIdCategory() == 1) {
+					category1 = 1;
 					if (categoryCount1 < 7) {
-						extracted(1, "Adventure", gridPane1, labelList1, imageList1, buttonList1, font, big, small,
-								categoryCount1, dMovie);
+						createGrid(1, gridPane1, labelList1, imageList1, buttonList1, font, big, small, categoryCount1,
+								dMovie);
 					}
 					categoryCount1++;
 				} else if (dMovie.getIdCategory() == 2) {
+					category1 = 2;
 					if (categoryCount2 < 7) {
-						extracted(2, "Action", gridPane2, labelList2, imageList2, buttonList2, font, big, small,
-								categoryCount2, dMovie);
+						createGrid(2, gridPane2, labelList2, imageList2, buttonList2, font, big, small, categoryCount2,
+								dMovie);
 					}
 					categoryCount2++;
 				}
 			}
+
+			Label t = new Label(Category.getCategory(1));
+			t.setAlignment(Pos.TOP_LEFT);
+			t.setTextFill(Color.WHITE);
+			t.setPrefWidth(280.0);
+			t.setFont(font.getFontOpenSansRegular(big));
+			labelCategory.add(t);
+			gridPane1.add(t, 0, 0);
+
+			Label c = new Label(Category.getCategory(2));
+			c.setAlignment(Pos.TOP_LEFT);
+			c.setTextFill(Color.WHITE);
+			c.setPrefWidth(280.0);
+			c.setFont(font.getFontOpenSansRegular(big));
+			labelCategory.add(c);
+			gridPane2.add(c, 0, 0);
 
 			arrowCategory(gridPane1, labelList1, imageList1, buttonList1, 1);
 			arrowCategory(gridPane2, labelList2, imageList2, buttonList2, 2);
@@ -168,18 +193,35 @@ public class ContentController {
 
 			@Override
 			public void handle(MouseEvent e) {
-				
+
 				clickArrowSide1 = 0;
 				clickArrowSide2 = 0;
 
 				List<Integer> intList1 = new ArrayList<Integer>();
 				List<Integer> intList2 = new ArrayList<Integer>();
 
-				category1++;
-				category2++;
-
 				int total1 = 0;
 				int total2 = 0;
+
+				boolean found = false;
+
+				int a = 0;
+
+				jump = category2;
+
+				while (a != 11) {
+					if (categoryTotal(jump + a) > 0) {
+						if (found == false) {
+							category1 = jump + a;
+							found = true;
+						} else {
+							category2 = jump + a;
+							break;
+						}
+					}
+
+					a++;
+				}
 
 				for (int k = 0; k < SystemThread.movieList.size(); k++) {
 					DisplayMovie dMovie = SystemThread.movieList.get(k);
@@ -191,6 +233,23 @@ public class ContentController {
 						total2++;
 					}
 				}
+
+				jump = category2;
+
+				boolean block = false;
+
+				for (int f = 1; f < 7; f++) {
+					if (categoryTotal(jump + f) != 0) {
+						block = true;
+					}
+				}
+
+				if (!block) {
+					arrowDownImg.setVisible(false);
+				}
+
+				labelCategory.get(0).setText(Category.getCategory(category1));
+				labelCategory.get(1).setText(Category.getCategory(category2));
 
 				int i = 0;
 
@@ -217,16 +276,7 @@ public class ContentController {
 					}
 				}
 
-				boolean hasCategory = false;
-
-				for (int r = 0; r < 10; r++) {
-					if (categoryTotal(category2 + r) > 0) {
-						hasCategory = true;
-					}
-				}
-
-				if (hasCategory == true) {
-					arrowDownImg.setVisible(false);
+				if (!arrowUpImg.isVisible()) {
 					arrowUpImg.setVisible(true);
 				}
 
@@ -243,7 +293,7 @@ public class ContentController {
 						}
 					}
 				}
-				
+
 				for (int z = 0; z < i; z++) {
 					buttonList1.get(z).setVisible(true);
 					labelList1.get(z).setVisible(true);
@@ -257,25 +307,18 @@ public class ContentController {
 						}
 					}
 				}
-				
-				if(total1 > 7)
-				{
+
+				if (total2 > 7) {
+					arrowList1.get(1).setVisible(true);
+				} else {
 					arrowList1.get(1).setVisible(false);
 				}
-				else
-				{
-					arrowList1.get(1).setVisible(true);
-				}
-				
-				if(total2 > 7)
-				{
+
+				if (total1 > 7) {
+					arrowList1.get(0).setVisible(true);
+				} else {
 					arrowList1.get(0).setVisible(false);
 				}
-				else
-				{
-					arrowList1.get(0).setVisible(true);
-				}
-				
 
 				arrowList2.get(0).setVisible(false);
 				arrowList2.get(1).setVisible(false);
@@ -289,23 +332,31 @@ public class ContentController {
 
 				clickArrowSide1 = 0;
 				clickArrowSide2 = 0;
-				
+
 				if (!arrowDownImg.isVisible()) {
 					arrowDownImg.setVisible(true);
-				}
-
-				if (categoryTotal(category1 - 2) == 0) {
-					arrowUpImg.setVisible(false);
 				}
 
 				List<Integer> intList1 = new ArrayList<Integer>();
 				List<Integer> intList2 = new ArrayList<Integer>();
 
-				category1--;
-				category2--;
-
 				int total1 = 0;
 				int total2 = 0;
+
+				boolean found = false;
+
+				category2 = category1;
+
+				int a = category2;
+
+				while (a != 0) {
+					if (categoryTotal(a-1) > 0) {
+						category1 = a-1;
+						found = true;
+						break;
+					}
+					a--;
+				}
 
 				for (int k = 0; k < SystemThread.movieList.size(); k++) {
 					DisplayMovie dMovie = SystemThread.movieList.get(k);
@@ -317,6 +368,23 @@ public class ContentController {
 						total2++;
 					}
 				}
+
+				jump = category2;
+				
+				boolean block = false;
+
+				for (int f = 1; f < 7; f++) {
+					if (categoryTotal(category1 - f) != 0) {
+						block = true;
+					}
+				}
+
+				if (!block) {
+					arrowUpImg.setVisible(false);
+				}
+
+				labelCategory.get(0).setText(Category.getCategory(category1));
+				labelCategory.get(1).setText(Category.getCategory(category2));
 
 				int i = 0;
 
@@ -356,7 +424,7 @@ public class ContentController {
 						}
 					}
 				}
-				
+
 				for (int z = 0; z < i; z++) {
 					buttonList1.get(z).setVisible(true);
 					labelList1.get(z).setVisible(true);
@@ -371,24 +439,18 @@ public class ContentController {
 					}
 				}
 				
-				if(total1 > 7)
-				{
+				
+				if (total2 > 7) {
 					arrowList1.get(1).setVisible(true);
-				}
-				else
-				{
+				} else {
 					arrowList1.get(1).setVisible(false);
 				}
-				
-				if(total2 > 7)
-				{
+
+				if (total1 > 7) {
 					arrowList1.get(0).setVisible(true);
-				}
-				else
-				{
+				} else {
 					arrowList1.get(0).setVisible(false);
 				}
-				
 
 				arrowList2.get(0).setVisible(false);
 				arrowList2.get(1).setVisible(false);
@@ -406,6 +468,7 @@ public class ContentController {
 		buttonPay.setFont(font.getFontOpenSansRegular(medium));
 		buttonDown.setFont(font.getFontOpenSansRegular(medium));
 		buttonClose.setFont(font.getFontOpenSansRegular(medium));
+
 	}
 
 	private void arrowCategory(GridPane gridPane, List<Label> labelList, List<ImageView> imageList,
@@ -562,14 +625,8 @@ public class ContentController {
 		}
 	}
 
-	private void extracted(int category, String categoryName, GridPane gridPane, List<Label> labelList,
-			List<ImageView> imageList, List<JFXButton> buttonList, FontController font, int big, int small, int i,
-			DisplayMovie dMovie) {
-		Label t = new Label(categoryName);
-		t.setAlignment(Pos.TOP_LEFT);
-		t.setTextFill(Color.WHITE);
-		t.setPrefWidth(280.0);
-		t.setFont(font.getFontOpenSansRegular(big));
+	private void createGrid(int category, GridPane gridPane, List<Label> labelList, List<ImageView> imageList,
+			List<JFXButton> buttonList, FontController font, int big, int small, int i, DisplayMovie dMovie) {
 		Label l = new Label(dMovie.getNameContent());
 		l.setTextFill(Color.WHITE);
 		l.setFont(font.getFontOpenSansRegular(small));
@@ -585,7 +642,6 @@ public class ContentController {
 		v.setPreserveRatio(true);
 		v.setFitHeight(220.0);
 		v.setFitWidth(180.0);
-		// v.setLayoutX(15);
 		v.setLayoutY(30);
 		p.setLeftAnchor(v, 0.0);
 		p.setRightAnchor(v, 0.0);
@@ -604,7 +660,6 @@ public class ContentController {
 		this.scaleEffectApply(v, 0.1f, true);
 		this.scaleEffectApply(v, -0.1f, false);
 
-		gridPane.add(t, 0, 0);
 		labelList.add(l);
 		imageList.add(v);
 		buttonList.add(b);
