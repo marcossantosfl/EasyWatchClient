@@ -8,51 +8,58 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import thread.SystemThread;
 
+//controller
 public class SplashSelectController {
 
+	//variables to control fxml
 	@FXML
 	Label labelUpdate;
 
-	/*
-	 * Simple animation in thread.
-	 */
-	public class ImageAnimation extends Thread {
+	//thread to check the download
+	public class Download extends Thread {
 
+		//break point
 		boolean executed = false;
 
 		public void run() {
 			while (true) {
+				//break point
 				if (executed == true) {
 					this.interrupt();
 					break;
 				}
 				try {
+					//update in 2 in 2 seconds
 					Thread.sleep(2000L);
 
+					//label changed according to the status of download (imagens and json data)
 					if (SystemThread.isBeingDownloaded == 1) {
+						//change label text
 						Platform.runLater(() -> {
 							labelUpdate.setText("Image download failed!");
 						});
 					} else if (SystemThread.isBeingDownloaded == -1) {
+						//change label text
 						Platform.runLater(() -> {
 							labelUpdate.setText("Data download failed!");
 						});
 					} else if (SystemThread.isBeingDownloaded == 2) {
 
+						//change label text
 						Platform.runLater(() -> {
 							labelUpdate.setText("Files: " + SystemThread.totalDownload + ": Downloading: "
 									+ String.valueOf(SystemThread.downloaded) + "%");
 						});
 
 					}
+					//final status = concluded
 					else if (SystemThread.isBeingDownloaded == 3) {
+						//set as default value to not load more than once time the new screen
 						SystemThread.isBeingDownloaded = 0;
 						Platform.runLater(() -> {
 							Parent root = null;
@@ -66,13 +73,17 @@ public class SplashSelectController {
 
 							Stage quarterStage = new Stage();
 
+							//initialize content screen
 							quarterStage.initStyle(StageStyle.TRANSPARENT);
 							scene1.setFill(Color.TRANSPARENT);
 							quarterStage.setTitle("Content");
 							quarterStage.setResizable(false);
 							quarterStage.setScene(scene1);
-							SystemThread.thirdStage.hide();
+							//close the third screen
+							SystemThread.thirdStage.close();
+							//show the fourth
 							quarterStage.show();
+							//break point
 							executed = true;
 						});
 					}
@@ -84,18 +95,20 @@ public class SplashSelectController {
 		}
 	}
 
-	/*
-	 * Initialize everything before the screen itself.
-	 */
+	//initialize
 	@FXML
 	protected void initialize() {
 
-		new ImageAnimation().start();
+		//start thread
+		new Download().start();
 
+		//load new font
 		FontController font = new FontController();
 
+		//font size
 		int size = 18;
 
+		//set font to the label
 		labelUpdate.setFont(font.getFontOpenSansRegular(size));
 	}
 }

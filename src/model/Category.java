@@ -1,5 +1,6 @@
 package model;
 
+//category class (just a model to return a string)
 public class Category {
 	public static String getCategory(int category) {
 		switch (category) {
