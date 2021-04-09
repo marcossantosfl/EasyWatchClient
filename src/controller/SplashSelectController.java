@@ -34,8 +34,8 @@ public class SplashSelectController {
 					break;
 				}
 				try {
-					//update in 2 in 2 seconds
-					Thread.sleep(2000L);
+					//update
+					Thread.sleep(500L);
 
 					//label changed according to the status of download (imagens and json data)
 					if (SystemThread.isBeingDownloaded == 1) {
@@ -71,18 +71,18 @@ public class SplashSelectController {
 
 							Scene scene1 = new Scene(root);
 
-							Stage quarterStage = new Stage();
+							Stage fourthStage = new Stage();
 
 							//initialize content screen
-							quarterStage.initStyle(StageStyle.TRANSPARENT);
+							fourthStage.initStyle(StageStyle.TRANSPARENT);
 							scene1.setFill(Color.TRANSPARENT);
-							quarterStage.setTitle("Content");
-							quarterStage.setResizable(false);
-							quarterStage.setScene(scene1);
+							fourthStage.setTitle("Content");
+							fourthStage.setResizable(false);
+							fourthStage.setScene(scene1);
 							//close the third screen
 							SystemThread.thirdStage.close();
 							//show the fourth
-							quarterStage.show();
+							fourthStage.show();
 							//break point
 							executed = true;
 						});

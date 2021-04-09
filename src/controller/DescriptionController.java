@@ -1,7 +1,5 @@
 package controller;
 
-import java.io.IOException;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 
@@ -67,12 +65,13 @@ public class DescriptionController {
 		textPopUp.setFont(font.getFontOpenSansBold(medium));
 		buttonClose.setFont(font.getFontOpenSansBold(big));
 		buttonClose.setFocusTraversable(false);
+
   }
 	
 	//close button
 	@FXML
 	protected void handleCloseAction(ActionEvent event) {
-		SystemThread.fourthStage.hide();
+		SystemThread.fifthStage.hide();
 		SystemThread.anchorPaneBlur.setEffect(null);
 	}
 }

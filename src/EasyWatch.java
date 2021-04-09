@@ -12,7 +12,7 @@ import thread.SystemThread;
 //EasyWatch class
 public class EasyWatch extends Application {
 	
-	//if close the app, threads will stop working and not running in background.
+	//if close the app, threads will stop working in background.
 	@Override
 	public void stop() throws Exception {
 	    super.stop();

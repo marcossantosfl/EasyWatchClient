@@ -64,7 +64,7 @@ public class Http {
 	public boolean fileDownloaded() throws IOException {
 
 		//url of the json
-		URL url = new URL("http://localhost/test/data/list/results.json");
+		URL url = new URL("https://marcossan.dev/api_easywatch/data/list/results.json");
 		URLConnection con = url.openConnection();
 
 		InputStream is = url.openStream();

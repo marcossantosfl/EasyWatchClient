@@ -102,6 +102,17 @@ public class SelectController {
 				//control the thread to get the data
 				SystemThread.typeSelected = true;
 				goToScreen("/view/splash_data.fxml", "Movies");
+				SystemThread.displayType = 0;
+			}
+		});
+		//add event if click on series, it goes to serie screen
+		anchorPaneSerie.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				//control the thread to get the data
+				SystemThread.typeSelected = true;
+				goToScreen("/view/splash_data.fxml", "Serie");
+				SystemThread.displayType = 1;
 			}
 		});
 		//add event if mouse entered, just change the background
@@ -130,15 +141,6 @@ public class SelectController {
 			@Override
 			public void handle(MouseEvent e) {
 				anchorPaneSerie.setStyle("-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 100 100 100 100;");
-			}
-		});
-		//add event if click on series, it goes to serie screen
-		anchorPaneSerie.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				//control the thread to get the data
-				SystemThread.typeSelected = true;
-				goToScreen("/view/splash_data.fxml", "Serie");
 			}
 		});
 	}

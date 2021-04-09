@@ -2,11 +2,8 @@ package model;
 
 //display class
 public abstract class Display {
-	
-	public String getDescription() {
-		return description;
-	}
 	//all content data
+	private int type;
 	private int idDisplay;
 	private String nameContent;
 	private int idCategory;
@@ -51,7 +48,16 @@ public abstract class Display {
 	public void setAvailable(int available) {
 		this.available = available;
 	}
+	public String getDescription() {
+		return description;
+	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
 	}
 }
