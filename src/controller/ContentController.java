@@ -387,7 +387,6 @@ public class ContentController {
 	// arrows down and up mouse click event
 	private EventHandler<MouseEvent> arrowDownUp(boolean down) {
 		EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
-			@SuppressWarnings("unchecked")
 			public void handle(MouseEvent event) {
 				// reset arrows left in case of user changed it
 				clickArrowSide1 = 0;
@@ -509,96 +508,95 @@ public class ContentController {
 					arrowList2.get(q).setVisible(false);
 				}
 			}
-
-			private void blockArrow(boolean down) {
-				// block arrow if there is no category down
-				boolean block = false;
-
-				// check if its arrow up or down
-				if (down == true) {
-					for (int f = 1; f < 7; f++) {
-						if (categoryTotal(jump + f) != 0) {
-							block = true;
-						}
-					}
-				} else {
-					for (int f = 1; f < 7; f++) {
-						if (categoryTotal(category1 - f) != 0) {
-							block = true;
-						}
-					}
-				}
-
-				// check if its arrow up or down
-				if (!block) {
-					if (down == true) {
-						arrowDownImg.setVisible(false);
-					} else {
-						arrowUpImg.setVisible(false);
-					}
-				}
-			}
-
-			// clear button event list
-			@SuppressWarnings("unchecked")
-			private void clearButtonList(List<JFXButton> buttonList) {
-				for (int j = 0; j < buttonList.size(); j++) {
-
-					for (int h = 0; h < eventHandlerList.size(); h++) {
-						buttonList.get(j).removeEventHandler(MouseEvent.MOUSE_CLICKED, eventHandlerList.get(h));
-					}
-				}
-			}
-
-			// clear image event list
-			@SuppressWarnings("unchecked")
-			private void clearImageList(List<ImageView> imageList) {
-				for (int j = 0; j < imageList.size(); j++) {
-
-					for (int h = 0; h < eventHandlerList.size(); h++) {
-						imageList.get(j).removeEventHandler(MouseEvent.MOUSE_CLICKED, eventHandlerList.get(h));
-					}
-				}
-			}
-
-			// set arrows visible or not
-			private void setArrowList(int total, List<ImageView> arrowList, int pos) {
-				if (total > 7) {
-					arrowList.get(pos).setVisible(true);
-				} else {
-					for (int n = 0; n < arrowList.size(); n++) {
-						arrowList.get(n).setVisible(false);
-					}
-				}
-			}
-
-			// hide elements
-			private void hideElement(int y, List<Label> labelList, List<ImageView> imageList,
-					List<JFXButton> buttonList) {
-				for (int z = 0; z < y; z++) {
-					buttonList.get(z).setVisible(true);
-					labelList.get(z).setVisible(true);
-					imageList.get(z).setVisible(true);
-				}
-
-				for (int d = y; d < buttonList.size(); d++) {
-					buttonList.get(d).setVisible(false);
-					labelList.get(d).setVisible(false);
-					imageList.get(d).setVisible(false);
-				}
-			}
-
-			// change grid
-			private int changeGrid(List<Integer> intList, int total, int i, List<Label> labelList,
-					List<ImageView> imageList, List<JFXButton> buttonList) {
-				for (int j = 0; j < total; j++) {
-					DisplayMovie dMovie = SystemThread.movieList.get(intList.get(j));
-					i = changeGridSetAll(labelList, imageList, buttonList, i, dMovie);
-				}
-				return i;
-			}
 		};
 		return eventHandler;
+	}
+
+	private void blockArrow(boolean down) {
+		// block arrow if there is no category down
+		boolean block = false;
+
+		// check if its arrow up or down
+		if (down == true) {
+			for (int f = 1; f < 7; f++) {
+				if (categoryTotal(jump + f) != 0) {
+					block = true;
+				}
+			}
+		} else {
+			for (int f = 1; f < 7; f++) {
+				if (categoryTotal(category1 - f) != 0) {
+					block = true;
+				}
+			}
+		}
+
+		// check if its arrow up or down
+		if (!block) {
+			if (down == true) {
+				arrowDownImg.setVisible(false);
+			} else {
+				arrowUpImg.setVisible(false);
+			}
+		}
+	}
+
+	// clear button event list
+	@SuppressWarnings("unchecked")
+	private void clearButtonList(List<JFXButton> buttonList) {
+		for (int j = 0; j < buttonList.size(); j++) {
+
+			for (int h = 0; h < eventHandlerList.size(); h++) {
+				buttonList.get(j).removeEventHandler(MouseEvent.MOUSE_CLICKED, eventHandlerList.get(h));
+			}
+		}
+	}
+
+	// clear image event list
+	@SuppressWarnings("unchecked")
+	private void clearImageList(List<ImageView> imageList) {
+		for (int j = 0; j < imageList.size(); j++) {
+
+			for (int h = 0; h < eventHandlerList.size(); h++) {
+				imageList.get(j).removeEventHandler(MouseEvent.MOUSE_CLICKED, eventHandlerList.get(h));
+			}
+		}
+	}
+
+	// set arrows visible or not
+	private void setArrowList(int total, List<ImageView> arrowList, int pos) {
+		if (total > 7) {
+			arrowList.get(pos).setVisible(true);
+		} else {
+			for (int n = 0; n < arrowList.size(); n++) {
+				arrowList.get(n).setVisible(false);
+			}
+		}
+	}
+
+	// hide elements
+	private void hideElement(int y, List<Label> labelList, List<ImageView> imageList, List<JFXButton> buttonList) {
+		for (int z = 0; z < y; z++) {
+			buttonList.get(z).setVisible(true);
+			labelList.get(z).setVisible(true);
+			imageList.get(z).setVisible(true);
+		}
+
+		for (int d = y; d < buttonList.size(); d++) {
+			buttonList.get(d).setVisible(false);
+			labelList.get(d).setVisible(false);
+			imageList.get(d).setVisible(false);
+		}
+	}
+
+	// change grid
+	private int changeGrid(List<Integer> intList, int total, int i, List<Label> labelList, List<ImageView> imageList,
+			List<JFXButton> buttonList) {
+		for (int j = 0; j < total; j++) {
+			DisplayMovie dMovie = SystemThread.movieList.get(intList.get(j));
+			i = changeGridSetAll(labelList, imageList, buttonList, i, dMovie);
+		}
+		return i;
 	}
 
 	private int changeGridSetAll(List<Label> labelList, List<ImageView> imageList, List<JFXButton> buttonList, int i,
@@ -629,8 +627,8 @@ public class ContentController {
 		buttonList.get(i).addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
 		eventHandlerList.add(eventHandler);
 
-		eventHandler = addEventHandler(dMovie, labelList.get(i), new Image(
-				"file:///" + SystemThread.folder.getAbsolutePath() + "/image/" + dMovie.getImage() + ".jpg"),
+		eventHandler = addEventHandler(dMovie, labelList.get(i),
+				new Image("file:///" + SystemThread.folder.getAbsolutePath() + "/image/" + dMovie.getImage() + ".jpg"),
 				imageList.get(i), buttonList.get(i));
 		imageList.get(i).addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
 		eventHandlerListImage.add(eventHandler);
@@ -788,32 +786,33 @@ public class ContentController {
 				}
 			}
 
-			private int countClick(boolean isRight) {
-				// check clicks
-				int clickArrowSide = 0;
-
-				// check which arrow was clicked
-				if (isRight == true) {
-					if (gridClick == 1) {
-						clickArrowSide1++;
-						clickArrowSide = clickArrowSide1;
-					} else if (gridClick == 2) {
-						clickArrowSide2++;
-						clickArrowSide = clickArrowSide2;
-					}
-				} else {
-					if (gridClick == 1) {
-						clickArrowSide1--;
-						clickArrowSide = clickArrowSide1;
-					} else if (gridClick == 2) {
-						clickArrowSide2--;
-						clickArrowSide = clickArrowSide2;
-					}
-				}
-				return clickArrowSide;
-			}
 		};
 		return eventHandler;
+	}
+
+	private int countClick(boolean isRight) {
+		// check clicks
+		int clickArrowSide = 0;
+
+		// check which arrow was clicked
+		if (isRight == true) {
+			if (gridClick == 1) {
+				clickArrowSide1++;
+				clickArrowSide = clickArrowSide1;
+			} else if (gridClick == 2) {
+				clickArrowSide2++;
+				clickArrowSide = clickArrowSide2;
+			}
+		} else {
+			if (gridClick == 1) {
+				clickArrowSide1--;
+				clickArrowSide = clickArrowSide1;
+			} else if (gridClick == 2) {
+				clickArrowSide2--;
+				clickArrowSide = clickArrowSide2;
+			}
+		}
+		return clickArrowSide;
 	}
 
 	// design the grid and set all the elements from the data
