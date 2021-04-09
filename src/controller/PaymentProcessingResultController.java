@@ -30,15 +30,19 @@ public class PaymentProcessingResultController {
 		// font size
 		int big = 24;
 
-		labelCheckout.setFont(font.getFontOpenSansBold(big));
-		labePaymentResult.setFont(font.getFontOpenSansBold(big));
-		buttonClose.setFont(font.getFontOpenSansBold(big));
+		setFontAndFocus(font, big);
 
 		if (SystemThread.resultPayment == true) {
 			labePaymentResult.setText("PAYMENT WAS ACCEPTED.");
 		} else {
 			labePaymentResult.setText("PAYMENT WAS DECLINED.");
 		}
+	}
+
+	private void setFontAndFocus(FontController font, int big) {
+		labelCheckout.setFont(font.getFontOpenSansBold(big));
+		labePaymentResult.setFont(font.getFontOpenSansBold(big));
+		buttonClose.setFont(font.getFontOpenSansBold(big));
 	}
 
 	@FXML

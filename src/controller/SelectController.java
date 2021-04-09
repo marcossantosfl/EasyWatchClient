@@ -87,14 +87,48 @@ public class SelectController {
 		//font size
 		int size = 24;
 		
-		//set font to the Node
-		buttonWindowDown.setFont(font.getFontOpenSansBold(size));
-		buttonWindowClose.setFont(font.getFontOpenSansBold(size));
+		setFontAndFocus(font, size);
 		
-		//set focus off
-		buttonWindowDown.setFocusTraversable(false);
-		buttonWindowClose.setFocusTraversable(false);
-		
+		addEventClick();
+		addEventEnter();
+		addEventExit();
+	}
+
+	private void addEventExit() {
+		//add event if mouse exit, just change the background to the original
+		anchorPaneSerie.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				anchorPaneSerie.setStyle("-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 100 100 100 100;");
+			}
+		});
+		//add event if mouse exit, just change the background to the original
+		anchorPaneMovie.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				anchorPaneMovie.setStyle("-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 100 100 100 100;");
+			}
+		});
+	}
+
+	private void addEventEnter() {
+		//add event if mouse entered, just change the background
+		anchorPaneMovie.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				anchorPaneMovie.setStyle("-fx-background-color: #000000; -fx-background-radius: 100 100 100 100;");
+			}
+		});
+		//add event if mouse entered, just change the background
+		anchorPaneSerie.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				anchorPaneSerie.setStyle("-fx-background-color: #000000; -fx-background-radius: 100 100 100 100;");
+			}
+		});
+	}
+
+	private void addEventClick() {
 		//add event if click on movies, it goes to movie screen
 		anchorPaneMovie.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 			@Override
@@ -115,34 +149,16 @@ public class SelectController {
 				SystemThread.displayType = 1;
 			}
 		});
-		//add event if mouse entered, just change the background
-		anchorPaneMovie.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				anchorPaneMovie.setStyle("-fx-background-color: #000000; -fx-background-radius: 100 100 100 100;");
-			}
-		});
-		//add event if mouse exit, just change the background to the original
-		anchorPaneMovie.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				anchorPaneMovie.setStyle("-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 100 100 100 100;");
-			}
-		});
-		//add event if mouse entered, just change the background
-		anchorPaneSerie.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				anchorPaneSerie.setStyle("-fx-background-color: #000000; -fx-background-radius: 100 100 100 100;");
-			}
-		});
-		//add event if mouse exit, just change the background to the original
-		anchorPaneSerie.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				anchorPaneSerie.setStyle("-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 100 100 100 100;");
-			}
-		});
+	}
+
+	private void setFontAndFocus(FontController font, int size) {
+		//set font to the Node
+		buttonWindowDown.setFont(font.getFontOpenSansBold(size));
+		buttonWindowClose.setFont(font.getFontOpenSansBold(size));
+		
+		//set focus off
+		buttonWindowDown.setFocusTraversable(false);
+		buttonWindowClose.setFocusTraversable(false);
 	}
 	
 	//minimize button

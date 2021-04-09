@@ -64,7 +64,7 @@ public class WatchController {
 
 	// card type (8 max)
 	int maxNumber = 8;
-	
+
 	private static class WatchList {
 
 		public static List<WatchList> list = new ArrayList<WatchList>();
@@ -100,23 +100,23 @@ public class WatchController {
 		int big = 20;
 		int medium = 16;
 
-		labelWatch.setFont(font.getFontOpenSansBold(big));
-		labelCard.setFont(font.getFontOpenSansBold(medium));
-		cardNumber.setFont(font.getFontOpenSansBold(medium));
-		buttonCard.setFont(font.getFontOpenSansBold(big));
-		buttonWatch.setFont(font.getFontOpenSansBold(big));
-		buttonClose.setFont(font.getFontOpenSansBold(big));
-		buttonClose.setFocusTraversable(false);
-		buttonCard.setFocusTraversable(false);
-		buttonWatch.setFocusTraversable(false);
-		
-		comboBox.valueProperty().addListener(new ChangeListener<String>() {
-	        @Override
-	        public void changed(ObservableValue ob, String s1, String s2) {
-	        	comboBox.setStyle(" -fx-background-color: #FFFFFF");
-	        }
-	    });
+		setFontAndFocus(font, big, medium);
 
+		addComboListener();
+
+		addEventCard();
+	}
+
+	private void addComboListener() {
+		comboBox.valueProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue ob, String s1, String s2) {
+				comboBox.setStyle(" -fx-background-color: #FFFFFF");
+			}
+		});
+	}
+
+	private void addEventCard() {
 		cardNumber.addEventFilter(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent k) {
 				if (cardNumber.getLength() >= maxNumber) {
@@ -140,6 +140,18 @@ public class WatchController {
 		});
 	}
 
+	private void setFontAndFocus(FontController font, int big, int medium) {
+		labelWatch.setFont(font.getFontOpenSansBold(big));
+		labelCard.setFont(font.getFontOpenSansBold(medium));
+		cardNumber.setFont(font.getFontOpenSansBold(medium));
+		buttonCard.setFont(font.getFontOpenSansBold(big));
+		buttonWatch.setFont(font.getFontOpenSansBold(big));
+		buttonClose.setFont(font.getFontOpenSansBold(big));
+		buttonClose.setFocusTraversable(false);
+		buttonCard.setFocusTraversable(false);
+		buttonWatch.setFocusTraversable(false);
+	}
+
 	@FXML
 	protected void handleCloseAction(ActionEvent event) {
 		SystemThread.seventhStage.close();
@@ -154,7 +166,8 @@ public class WatchController {
 
 		Http http = new Http();
 
-		HttpResponse<String> httpResponse = http.post("https://marcossan.dev/api_easywatch/pages/getWatchList.php", jsonSend);
+		HttpResponse<String> httpResponse = http.post("https://marcossan.dev/api_easywatch/pages/getWatchList.php",
+				jsonSend);
 
 		// re-use the same screen node (original screen)
 		AnchorPane pResult = new AnchorPane();
@@ -167,81 +180,90 @@ public class WatchController {
 		PauseTransition pause = new PauseTransition(Duration.seconds(3));
 		pause.setOnFinished(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+
 				anchorPane.getChildren().clear();
 				anchorPane.getChildren().setAll(pResult);
 
-				if (httpResponse.statusCode() == 200) {
-					WatchList.list.clear();
-
-					JSONObject jsonReceive = new JSONObject(httpResponse.body());
-
-					JSONArray data = jsonReceive.getJSONArray("watchList");
-
-					for (int i = 0; i < data.length(); i++) {
-
-						WatchList watchList = new WatchList();
-						JSONObject json = data.getJSONObject(i);
-
-						watchList.setName((json.getString("name")));
-						watchList.setDate(json.getString("date"));
-
-						WatchList.list.add(watchList);
-					}
-
-					if (WatchList.list.size() > 0) {
-						for (int i = 0; i < WatchList.list.size(); i++) {
-							WatchList watch = WatchList.list.get(i);
-
-							LocalDate localDate = LocalDate.parse(watch.getDate());
-							 
-							int date = (int) ChronoUnit.DAYS.between(localDate,
-									java.sql.Date.valueOf(LocalDate.now()).toLocalDate());
-
-							String complete = date > 7 ? " - EXPIRED" : " - " + (7 - date) + " DAYS(S) LEFT";
-
-							comboList.add(watch.getName() + complete);
-						}
-
-						comboBox.valueProperty().set(null);
-
-						comboBox.setItems(comboList);
-
-						comboBox.setVisible(true);
-					} else {
-						comboBox.setVisible(false);
-					}
-				} else {
-					comboBox.setVisible(false);
-				}
+				comboBoxSet(httpResponse);
 			}
+
 		});
 		pause.play();
 
 	}
-	
+
+	private void comboBoxSet(HttpResponse<String> httpResponse) {
+		if (httpResponse.statusCode() == 200) {
+			WatchList.list.clear();
+
+			JSONObject jsonReceive = new JSONObject(httpResponse.body());
+
+			JSONArray data = jsonReceive.getJSONArray("watchList");
+
+			createListCombo(data);
+
+			if (WatchList.list.size() > 0) {
+				for (int i = 0; i < WatchList.list.size(); i++) {
+					WatchList watch = WatchList.list.get(i);
+
+					LocalDate localDate = LocalDate.parse(watch.getDate());
+
+					int date = (int) ChronoUnit.DAYS.between(localDate,
+							java.sql.Date.valueOf(LocalDate.now()).toLocalDate());
+
+					String complete = date > 7 ? " - EXPIRED" : " - " + (7 - date) + " DAYS(S) LEFT";
+
+					comboList.add(watch.getName() + complete);
+				}
+
+				comboBox.valueProperty().set(null);
+
+				comboBox.setItems(comboList);
+
+				comboBox.setVisible(true);
+			} else {
+				comboBox.setVisible(false);
+			}
+		} else {
+			comboBox.setVisible(false);
+		}
+	}
+
+	private void createListCombo(JSONArray data) {
+		for (int i = 0; i < data.length(); i++) {
+
+			WatchList watchList = new WatchList();
+			JSONObject json = data.getJSONObject(i);
+
+			watchList.setName((json.getString("name")));
+			watchList.setDate(json.getString("date"));
+
+			WatchList.list.add(watchList);
+		}
+	}
+
 	@FXML
-	protected void handleComboBoxAction(ActionEvent event)
-	{
-		//check if content if expired
+	protected void handleComboBoxAction(ActionEvent event) {
+		// check if content if expired
 		if (comboBox.getValue() != null) {
 
-			buttonWatch.setVisible(true); 
-			
+			buttonWatch.setVisible(true);
+
 			for (int i = 0; i < WatchList.list.size(); i++) {
 				WatchList watch = WatchList.list.get(i);
-				
+
 				if (comboBox.getValue().equalsIgnoreCase(watch.getName() + " - EXPIRED")) {
 					buttonWatch.setVisible(false);
 				}
 			}
 
-		}	
+		}
 	}
 
 	@FXML
 	protected void handleWatchAction(ActionEvent event) {
 		Platform.runLater(() -> {
-			
+
 			Parent root = null;
 			try {
 				root = FXMLLoader.load(getClass().getResource("/view/play.fxml"));
@@ -258,9 +280,9 @@ public class WatchController {
 			stage.setTitle("Watching");
 			stage.setResizable(false);
 			stage.initModality(Modality.APPLICATION_MODAL);
-		    stage.setScene(scene1);
-		    stage.show();
-		    SystemThread.eighthStage = stage;
+			stage.setScene(scene1);
+			stage.show();
+			SystemThread.eighthStage = stage;
 		});
 	}
 }

@@ -99,30 +99,7 @@ public class SystemThread extends Thread {
 							downloadTotal(data_array);
 
 							// check all json data
-							for (int i = 0; i < data_array.length(); i++) {
-
-								JSONObject json_row = data_array.getJSONObject(i);
-
-								// get only the type 0, movies.
-								DisplayMovie dMovie = new DisplayMovie();
-								dMovie.setType(json_row.getInt("type"));
-								dMovie.setIdDisplay(json_row.getInt("idDisplay"));
-								dMovie.setNameContent(json_row.getString("nameContent"));
-								dMovie.setIdCategory(json_row.getInt("idCategory"));
-								dMovie.setImage(json_row.getString("image"));
-								dMovie.setPrice(json_row.getDouble("price"));
-								dMovie.setAvailable(json_row.getInt("available"));
-								dMovie.setDescription(json_row.getString("description"));
-								movieList.add(dMovie);
-								try {
-									downloadImage(json_row);
-								} catch (IOException e) {
-									// in case of an error, display on the screen by changing the variable
-									isBeingDownloaded = 1;
-									System.out.println("Download failed: " + json_row.getString("image"));
-								}
-
-							}
+							setJsonObject(data_array);
 
 							// success download
 							isBeingDownloaded = 3;
@@ -144,6 +121,33 @@ public class SystemThread extends Thread {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void setJsonObject(JSONArray data_array) {
+		for (int i = 0; i < data_array.length(); i++) {
+
+			JSONObject json_row = data_array.getJSONObject(i);
+
+			// get only the type 0, movies.
+			DisplayMovie dMovie = new DisplayMovie();
+			dMovie.setType(json_row.getInt("type"));
+			dMovie.setIdDisplay(json_row.getInt("idDisplay"));
+			dMovie.setNameContent(json_row.getString("nameContent"));
+			dMovie.setIdCategory(json_row.getInt("idCategory"));
+			dMovie.setImage(json_row.getString("image"));
+			dMovie.setPrice(json_row.getDouble("price"));
+			dMovie.setAvailable(json_row.getInt("available"));
+			dMovie.setDescription(json_row.getString("description"));
+			movieList.add(dMovie);
+			try {
+				downloadImage(json_row);
+			} catch (IOException e) {
+				// in case of an error, display on the screen by changing the variable
+				isBeingDownloaded = 1;
+				System.out.println("Download failed: " + json_row.getString("image"));
+			}
+
 		}
 	}
 

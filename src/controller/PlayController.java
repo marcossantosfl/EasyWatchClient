@@ -39,8 +39,7 @@ public class PlayController {
 	    this.anchorPane.getChildren().add(webview);
 	    
 		buttonClose = new JFXButton("X");
-		buttonClose.setFont(font.getFontOpenSansBold(big));
-		buttonClose.setFocusTraversable(false);
+		setFontAndFocus(font, big);
 		buttonClose.setTextFill(Paint.valueOf("WHITE"));
 		buttonClose.setLayoutX(915);
 		buttonClose.setLayoutY(15);
@@ -52,6 +51,11 @@ public class PlayController {
         });
 		this.anchorPane.getChildren().add(buttonClose);
 		
+	}
+
+	private void setFontAndFocus(FontController font, int big) {
+		buttonClose.setFont(font.getFontOpenSansBold(big));
+		buttonClose.setFocusTraversable(false);
 	}
 
 	@FXML

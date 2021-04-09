@@ -60,13 +60,17 @@ public class DescriptionController {
 		int big = 24;
 		int medium = 19;
 
+		setFontAndFocus(font, big, medium);
+
+  }
+
+	private void setFontAndFocus(FontController font, int big, int medium) {
 		titleLabel.setText("");
 		titleLabel.setFont(font.getFontOpenSansBold(big));
 		textPopUp.setFont(font.getFontOpenSansBold(medium));
 		buttonClose.setFont(font.getFontOpenSansBold(big));
 		buttonClose.setFocusTraversable(false);
-
-  }
+	}
 	
 	//close button
 	@FXML

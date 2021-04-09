@@ -65,6 +65,13 @@ public class PaymentController {
 		int big = 20;
 		int medium = 16;
 
+		setFontAndFocus(font, big, medium);
+
+		addCardEvent();
+		addEmailEvent();
+	}
+
+	private void setFontAndFocus(FontController font, int big, int medium) {
 		checkOut.setFont(font.getFontOpenSansBold(big));
 		cardNumber.setFont(font.getFontOpenSansBold(medium));
 		cardLabel.setFont(font.getFontOpenSansBold(medium));
@@ -74,28 +81,9 @@ public class PaymentController {
 		labelEmail.setFont(font.getFontOpenSansBold(medium));
 		buttonClose.setFont(font.getFontOpenSansBold(big));
 		buttonClose.setFocusTraversable(false);
+	}
 
-		cardNumber.addEventFilter(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
-			public void handle(KeyEvent k) {
-				if (cardNumber.getLength() >= maxNumber) {
-					k.consume();
-				}
-			}
-		});
-		cardNumber.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if (!newValue.matches("\\d*")) {
-					cardNumber.setText(newValue.replaceAll("[^\\d]", ""));
-				}
-
-				if (cardNumber.getLength() == maxNumber) {
-					payButton.setVisible(true);
-				} else {
-					payButton.setVisible(false);
-				}
-			}
-		});
+	private void addEmailEvent() {
 		emailAddress.textProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				pattern = Pattern.compile("^(.+)@(.+)$");
@@ -126,6 +114,30 @@ public class PaymentController {
 			public void handle(KeyEvent k) {
 				if (emailAddress.getLength() >= 40) {
 					k.consume();
+				}
+			}
+		});
+	}
+
+	private void addCardEvent() {
+		cardNumber.addEventFilter(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
+			public void handle(KeyEvent k) {
+				if (cardNumber.getLength() >= maxNumber) {
+					k.consume();
+				}
+			}
+		});
+		cardNumber.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (!newValue.matches("\\d*")) {
+					cardNumber.setText(newValue.replaceAll("[^\\d]", ""));
+				}
+
+				if (cardNumber.getLength() == maxNumber) {
+					payButton.setVisible(true);
+				} else {
+					payButton.setVisible(false);
 				}
 			}
 		});

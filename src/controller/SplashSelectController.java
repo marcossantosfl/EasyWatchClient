@@ -61,37 +61,41 @@ public class SplashSelectController {
 					else if (SystemThread.isBeingDownloaded == 3) {
 						//set as default value to not load more than once time the new screen
 						SystemThread.isBeingDownloaded = 0;
-						Platform.runLater(() -> {
-							Parent root = null;
-							try {
-								root = FXMLLoader.load(getClass().getResource("/view/content.fxml"));
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-
-							Scene scene1 = new Scene(root);
-
-							Stage fourthStage = new Stage();
-
-							//initialize content screen
-							fourthStage.initStyle(StageStyle.TRANSPARENT);
-							scene1.setFill(Color.TRANSPARENT);
-							fourthStage.setTitle("Content");
-							fourthStage.setResizable(false);
-							fourthStage.setScene(scene1);
-							//close the third screen
-							SystemThread.thirdStage.close();
-							//show the fourth
-							fourthStage.show();
-							//break point
-							executed = true;
-						});
+						loadContentScreen();
 					}
 
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
+		}
+
+		private void loadContentScreen() {
+			Platform.runLater(() -> {
+				Parent root = null;
+				try {
+					root = FXMLLoader.load(getClass().getResource("/view/content.fxml"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				Scene scene1 = new Scene(root);
+
+				Stage fourthStage = new Stage();
+
+				//initialize content screen
+				fourthStage.initStyle(StageStyle.TRANSPARENT);
+				scene1.setFill(Color.TRANSPARENT);
+				fourthStage.setTitle("Content");
+				fourthStage.setResizable(false);
+				fourthStage.setScene(scene1);
+				//close the third screen
+				SystemThread.thirdStage.close();
+				//show the fourth
+				fourthStage.show();
+				//break point
+				executed = true;
+			});
 		}
 	}
 
@@ -108,6 +112,10 @@ public class SplashSelectController {
 		//font size
 		int size = 18;
 
+		setFontAndFocus(font, size);
+	}
+
+	private void setFontAndFocus(FontController font, int size) {
 		//set font to the label
 		labelUpdate.setFont(font.getFontOpenSansRegular(size));
 	}

@@ -126,40 +126,14 @@ public class ContentController {
 	@SuppressWarnings("rawtypes")
 	List<EventHandler> eventHandlerArrow = new ArrayList<EventHandler>();
 
-	// scale effect if passes the mouse on the images
-	private void scaleEffect(Node node, double scale) {
-		ScaleTransition st = new ScaleTransition(Duration.millis(1), node);
-		st.setByX(scale);
-		st.setByY(scale);
-		st.play();
-	}
-
-	// apply effect on the nodes
-	private void scaleEffectApply(Node node, double scale, boolean type) {
-		if (type == true) {
-			nodeEffect(node, scale, MouseEvent.MOUSE_ENTERED);
-		} else {
-			nodeEffect(node, scale, MouseEvent.MOUSE_EXITED);
-		}
-	}
-
-	// apply effect on the nodes
-	private void nodeEffect(Node node, double scale, EventType<MouseEvent> mouseEntered) {
-		node.addEventHandler(mouseEntered, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent e) {
-				scaleEffect(node, scale);
-			}
-
-		});
-	}
-
 	// initialize
 	@FXML
 	protected void initialize() {
 
 		// set arrow down as visible (control with grid)
 		arrowDownImg.setVisible(true);
+		// arrow up set invisible
+		arrowUpImg.setVisible(false);
 
 		// reset variables
 		reset();
@@ -175,24 +149,85 @@ public class ContentController {
 		int medium = 14;
 		int small = 12;
 
-		// arrow up set invisible
-		arrowUpImg.setVisible(false);
+		hasCategory();
 
-		// check if has next category to show the arrow down
-		boolean hasCategory = false;
+		addGrid(font, big, small);
 
-		// loop to check if there is another
-		for (int r = 0; r < 10; r++) {
-			if (categoryTotal(category2 + r) > 0) {
-				hasCategory = true;
-			}
+		addLabel(font);
+
+		addArrow();
+
+		addEvent();
+
+		setFontAndFocus(font, medium);
+
+		setLabelSwitch();
+	}
+
+	private void setLabelSwitch() {
+		// set text according to the display type (movies or series)
+		if (SystemThread.displayType == 0) {
+			buttonSwitch.setText("SWITCH TO SERIES");
+		} else {
+			buttonSwitch.setText("SWITCH TO MOVIES");
 		}
+	}
 
-		// set visible false if did not find
-		if (hasCategory != true) {
-			arrowDownImg.setVisible(false);
-		}
+	private void setFontAndFocus(FontController font, int medium) {
+		// focus disabled
+		buttonWatch.setFocusTraversable(false);
+		buttonPay.setFocusTraversable(false);
+		buttonDown.setFocusTraversable(false);
+		buttonClose.setFocusTraversable(false);
+		buttonSwitch.setFocusTraversable(false);
 
+		// set font on the buttons
+		buttonWatch.setFont(font.getFontOpenSansRegular(medium));
+		buttonPay.setFont(font.getFontOpenSansRegular(medium));
+		buttonDown.setFont(font.getFontOpenSansRegular(medium));
+		buttonClose.setFont(font.getFontOpenSansRegular(medium));
+		buttonSwitch.setFont(font.getFontOpenSansRegular(medium));
+	}
+
+	private void addEvent() {
+		// create event handle list to delete when changes the grid (arrow down)
+		EventHandler<MouseEvent> eventHandler = arrowDownUp(true);
+
+		// mouse clicked
+		arrowDownImg.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
+
+		// save event
+		eventHandlerArrow.add(eventHandler);
+
+		// create event handle list to delete when changes the grid (arrow up)
+		eventHandler = arrowDownUp(false);
+
+		// mouse clicked
+		arrowUpImg.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
+
+		// save event
+		eventHandlerArrow.add(eventHandler);
+	}
+
+	private void addArrow() {
+		// create arrows
+		arrowCategory(gridPane1, labelList1, imageList1, buttonList1, 1);
+		arrowCategory(gridPane2, labelList2, imageList2, buttonList2, 2);
+	}
+
+	private void addLabel(FontController font) {
+		// label of kind of movie or serie (grid 1)
+		Label t = new Label(Category.getCategory(1));
+		createCategoryLabel(font, t);
+		gridPane1.add(t, 0, 0);
+
+		// label of kind of movie or serie (grid 2)
+		Label c = new Label(Category.getCategory(2));
+		createCategoryLabel(font, c);
+		gridPane2.add(c, 0, 0);
+	}
+
+	private void addGrid(FontController font, int big, int small) {
 		// count how many and display only seven on the grid, if there is more, show
 		// arrows.
 		int categoryCount1 = 0;
@@ -222,58 +257,22 @@ public class ContentController {
 				}
 			}
 		}
+	}
 
-		// label of kind of movie or serie (grid 1)
-		Label t = new Label(Category.getCategory(1));
-		createCategoryLabel(font, t);
-		gridPane1.add(t, 0, 0);
+	private void hasCategory() {
+		// check if has next category to show the arrow down
+		boolean hasCategory = false;
 
-		// label of kind of movie or serie (grid 2)
-		Label c = new Label(Category.getCategory(2));
-		createCategoryLabel(font, c);
-		gridPane2.add(c, 0, 0);
+		// loop to check if there is another
+		for (int r = 0; r < 10; r++) {
+			if (categoryTotal(category2 + r) > 0) {
+				hasCategory = true;
+			}
+		}
 
-		// create arrows
-		arrowCategory(gridPane1, labelList1, imageList1, buttonList1, 1);
-		arrowCategory(gridPane2, labelList2, imageList2, buttonList2, 2);
-
-		// create event handle list to delete when changes the grid (arrow down)
-		EventHandler<MouseEvent> eventHandler = arrowDownUp(true);
-
-		// mouse clicked
-		arrowDownImg.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
-
-		// save event
-		eventHandlerArrow.add(eventHandler);
-
-		// create event handle list to delete when changes the grid (arrow up)
-		eventHandler = arrowDownUp(false);
-
-		// mouse clicked
-		arrowUpImg.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
-
-		// save event
-		eventHandlerArrow.add(eventHandler);
-
-		// focus disabled
-		buttonWatch.setFocusTraversable(false);
-		buttonPay.setFocusTraversable(false);
-		buttonDown.setFocusTraversable(false);
-		buttonClose.setFocusTraversable(false);
-		buttonSwitch.setFocusTraversable(false);
-
-		// set font on the buttons
-		buttonWatch.setFont(font.getFontOpenSansRegular(medium));
-		buttonPay.setFont(font.getFontOpenSansRegular(medium));
-		buttonDown.setFont(font.getFontOpenSansRegular(medium));
-		buttonClose.setFont(font.getFontOpenSansRegular(medium));
-		buttonSwitch.setFont(font.getFontOpenSansRegular(medium));
-
-		// set text according to the display type (movies or series)
-		if (SystemThread.displayType == 0) {
-			buttonSwitch.setText("SWITCH TO SERIES");
-		} else {
-			buttonSwitch.setText("SWITCH TO MOVIES");
+		// set visible false if did not find
+		if (hasCategory != true) {
+			arrowDownImg.setVisible(false);
 		}
 	}
 
@@ -319,6 +318,34 @@ public class ContentController {
 		buttonClicked = null;
 
 		buttonClickedPrice = -1;
+	}
+
+	// scale effect if passes the mouse on the images
+	private void scaleEffect(Node node, double scale) {
+		ScaleTransition st = new ScaleTransition(Duration.millis(1), node);
+		st.setByX(scale);
+		st.setByY(scale);
+		st.play();
+	}
+
+	// apply effect on the nodes
+	private void scaleEffectApply(Node node, double scale, boolean type) {
+		if (type == true) {
+			nodeEffect(node, scale, MouseEvent.MOUSE_ENTERED);
+		} else {
+			nodeEffect(node, scale, MouseEvent.MOUSE_EXITED);
+		}
+	}
+
+	// apply effect on the nodes
+	private void nodeEffect(Node node, double scale, EventType<MouseEvent> mouseEntered) {
+		node.addEventHandler(mouseEntered, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				scaleEffect(node, scale);
+			}
+
+		});
 	}
 
 	// load new screen
@@ -440,32 +467,7 @@ public class ContentController {
 				// save the category if clicks on the arrow up and get back to the previous
 				jump = category2;
 
-				// block arrow if there is no category down
-				boolean block = false;
-
-				// check if its arrow up or down
-				if (down == true) {
-					for (int f = 1; f < 7; f++) {
-						if (categoryTotal(jump + f) != 0) {
-							block = true;
-						}
-					}
-				} else {
-					for (int f = 1; f < 7; f++) {
-						if (categoryTotal(category1 - f) != 0) {
-							block = true;
-						}
-					}
-				}
-
-				// check if its arrow up or down
-				if (!block) {
-					if (down == true) {
-						arrowDownImg.setVisible(false);
-					} else {
-						arrowUpImg.setVisible(false);
-					}
-				}
+				blockArrow(down);
 
 				// change labels according to the new category
 				labelCategory.get(0).setText(Category.getCategory(category1));
@@ -505,6 +507,35 @@ public class ContentController {
 				// arrows invisible
 				for (int q = 0; q < arrowList2.size(); q++) {
 					arrowList2.get(q).setVisible(false);
+				}
+			}
+
+			private void blockArrow(boolean down) {
+				// block arrow if there is no category down
+				boolean block = false;
+
+				// check if its arrow up or down
+				if (down == true) {
+					for (int f = 1; f < 7; f++) {
+						if (categoryTotal(jump + f) != 0) {
+							block = true;
+						}
+					}
+				} else {
+					for (int f = 1; f < 7; f++) {
+						if (categoryTotal(category1 - f) != 0) {
+							block = true;
+						}
+					}
+				}
+
+				// check if its arrow up or down
+				if (!block) {
+					if (down == true) {
+						arrowDownImg.setVisible(false);
+					} else {
+						arrowUpImg.setVisible(false);
+					}
 				}
 			}
 
@@ -562,36 +593,47 @@ public class ContentController {
 					List<ImageView> imageList, List<JFXButton> buttonList) {
 				for (int j = 0; j < total; j++) {
 					DisplayMovie dMovie = SystemThread.movieList.get(intList.get(j));
-					if (dMovie.getType() == SystemThread.displayType) {
-						if (i < 7) {
-							EventHandler<MouseEvent> eventHandler = addEventHandler(dMovie, buttonList.get(i));
-							buttonList.get(i).addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
-							eventHandlerList.add(eventHandler);
-
-							eventHandler = addEventHandler(dMovie, labelList.get(i), new Image("file:///"
-									+ SystemThread.folder.getAbsolutePath() + "/image/" + dMovie.getImage() + ".jpg"),
-									imageList.get(i), buttonList.get(i));
-							imageList.get(i).addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
-							eventHandlerListImage.add(eventHandler);
-
-							if (buttonClickedPrice == dMovie.getIdDisplay()) {
-								buttonClicked = buttonList.get(i);
-								buttonList.get(i).setStyle("-fx-background-color: #f77f00");
-							} else {
-								buttonList.get(i).setStyle(null);
-							}
-							buttonList.get(i).setText(String.valueOf(dMovie.getPrice()));
-							labelList.get(i).setText(String.valueOf(dMovie.getNameContent()));
-							imageList.get(i).setImage(new Image("file:///" + SystemThread.folder.getAbsolutePath()
-									+ "/image/" + dMovie.getImage() + ".jpg"));
-							i++;
-						}
-					}
+					i = changeGridSetAll(labelList, imageList, buttonList, i, dMovie);
 				}
 				return i;
 			}
 		};
 		return eventHandler;
+	}
+
+	private int changeGridSetAll(List<Label> labelList, List<ImageView> imageList, List<JFXButton> buttonList, int i,
+			DisplayMovie dMovie) {
+		if (dMovie.getType() == SystemThread.displayType) {
+			if (i < 7) {
+				newGridEvent(labelList, imageList, buttonList, i, dMovie);
+
+				if (buttonClickedPrice == dMovie.getIdDisplay()) {
+					buttonClicked = buttonList.get(i);
+					buttonList.get(i).setStyle("-fx-background-color: #f77f00");
+				} else {
+					buttonList.get(i).setStyle(null);
+				}
+				buttonList.get(i).setText(String.valueOf(dMovie.getPrice()));
+				labelList.get(i).setText(String.valueOf(dMovie.getNameContent()));
+				imageList.get(i).setImage(new Image(
+						"file:///" + SystemThread.folder.getAbsolutePath() + "/image/" + dMovie.getImage() + ".jpg"));
+				i++;
+			}
+		}
+		return i;
+	}
+
+	private void newGridEvent(List<Label> labelList, List<ImageView> imageList, List<JFXButton> buttonList, int i,
+			DisplayMovie dMovie) {
+		EventHandler<MouseEvent> eventHandler = addEventHandler(dMovie, buttonList.get(i));
+		buttonList.get(i).addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
+		eventHandlerList.add(eventHandler);
+
+		eventHandler = addEventHandler(dMovie, labelList.get(i), new Image(
+				"file:///" + SystemThread.folder.getAbsolutePath() + "/image/" + dMovie.getImage() + ".jpg"),
+				imageList.get(i), buttonList.get(i));
+		imageList.get(i).addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
+		eventHandlerListImage.add(eventHandler);
 	}
 
 	// arrows left/right
@@ -628,26 +670,31 @@ public class ContentController {
 			this.scaleEffectApply(left, -0.1f, false);
 
 			// add events
-			EventHandler<MouseEvent> eventHandler = rightOrLeft(true, right);
-
-			right.addEventHandler(MouseEvent.MOUSE_ENTERED, eventHandler);
-
-			eventHandler = rightOrLeft(false, left);
-
-			left.addEventHandler(MouseEvent.MOUSE_ENTERED, eventHandler);
-
-			eventHandler = rightOrLeft(true, left, right, labelList, imageList, buttonList);
-
-			right.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
-
-			eventHandler = rightOrLeft(false, left, right, labelList, imageList, buttonList);
-
-			left.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
+			arrowSetEvent(labelList, imageList, buttonList, left, right);
 
 			// add arrow to the pane
 			gridPane.add(left, 0, 1);
 			gridPane.add(right, 8, 1);
 		}
+	}
+
+	private void arrowSetEvent(List<Label> labelList, List<ImageView> imageList, List<JFXButton> buttonList,
+			ImageView left, ImageView right) {
+		EventHandler<MouseEvent> eventHandler = rightOrLeft(true, right);
+
+		right.addEventHandler(MouseEvent.MOUSE_ENTERED, eventHandler);
+
+		eventHandler = rightOrLeft(false, left);
+
+		left.addEventHandler(MouseEvent.MOUSE_ENTERED, eventHandler);
+
+		eventHandler = rightOrLeft(true, left, right, labelList, imageList, buttonList);
+
+		right.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
+
+		eventHandler = rightOrLeft(false, left, right, labelList, imageList, buttonList);
+
+		left.addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
 	}
 
 	// arrow event (left or right)
@@ -701,27 +748,7 @@ public class ContentController {
 					}
 				}
 
-				// check clicks
-				int clickArrowSide = 0;
-
-				// check which arrow was clicked
-				if (isRight == true) {
-					if (gridClick == 1) {
-						clickArrowSide1++;
-						clickArrowSide = clickArrowSide1;
-					} else if (gridClick == 2) {
-						clickArrowSide2++;
-						clickArrowSide = clickArrowSide2;
-					}
-				} else {
-					if (gridClick == 1) {
-						clickArrowSide1--;
-						clickArrowSide = clickArrowSide1;
-					} else if (gridClick == 2) {
-						clickArrowSide2--;
-						clickArrowSide = clickArrowSide2;
-					}
-				}
+				int clickArrowSide = countClick(isRight);
 
 				// check if there is another element in the array according to the clicks
 				// set arrow as visible or invisible
@@ -757,34 +784,33 @@ public class ContentController {
 
 				for (int j = clickArrowSide; j < intList1.size(); j++) {
 					DisplayMovie dMovie = SystemThread.movieList.get(intList1.get(j));
-					if (dMovie.getType() == SystemThread.displayType) {
-						if (i < 7) {
-							// reset handler when change screen
-							EventHandler<MouseEvent> eventHandler = addEventHandler(dMovie, buttonList.get(i));
-							buttonList.get(i).addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
-							eventHandlerList.add(eventHandler);
-
-							eventHandler = addEventHandler(dMovie, labelList.get(i), new Image("file:///"
-									+ SystemThread.folder.getAbsolutePath() + "/image/" + dMovie.getImage() + ".jpg"),
-									imageList.get(i), buttonList.get(i));
-							imageList.get(i).addEventHandler(MouseEvent.MOUSE_CLICKED, eventHandler);
-							eventHandlerListImage.add(eventHandler);
-
-							if (buttonClickedPrice == dMovie.getIdDisplay()) {
-								buttonClicked = buttonList.get(i);
-								buttonList.get(i).setStyle("-fx-background-color: #f77f00");
-							} else {
-								buttonList.get(i).setStyle(null);
-							}
-							buttonList.get(i).setText(String.valueOf(dMovie.getPrice()));
-							labelList.get(i).setText(String.valueOf(dMovie.getNameContent()));
-							imageList.get(i).setImage(new Image("file:///" + SystemThread.folder.getAbsolutePath()
-									+ "/image/" + dMovie.getImage() + ".jpg"));
-							i++;
-						}
-					}
-
+					i = changeGridSetAll(labelList, imageList, buttonList, i, dMovie);
 				}
+			}
+
+			private int countClick(boolean isRight) {
+				// check clicks
+				int clickArrowSide = 0;
+
+				// check which arrow was clicked
+				if (isRight == true) {
+					if (gridClick == 1) {
+						clickArrowSide1++;
+						clickArrowSide = clickArrowSide1;
+					} else if (gridClick == 2) {
+						clickArrowSide2++;
+						clickArrowSide = clickArrowSide2;
+					}
+				} else {
+					if (gridClick == 1) {
+						clickArrowSide1--;
+						clickArrowSide = clickArrowSide1;
+					} else if (gridClick == 2) {
+						clickArrowSide2--;
+						clickArrowSide = clickArrowSide2;
+					}
+				}
+				return clickArrowSide;
 			}
 		};
 		return eventHandler;

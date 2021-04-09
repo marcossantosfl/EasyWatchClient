@@ -30,16 +30,9 @@ public class Http {
 				.uri(URI.create(url)).header("Content-Type", "application/json").build();
 
 		//get response and data
-		HttpResponse<String> response = null;
-
-		try {
-			response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		return response;
+		return retHttpResponse(request);
 	}
+
 
 	//get http client
 	public HttpResponse<String> get(String url) {
@@ -48,7 +41,10 @@ public class Http {
 		HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url))
 				.header("Content-Type", "application/json").build();
 
-		//get response and data
+		return retHttpResponse(request);
+	}
+	
+	private HttpResponse<String> retHttpResponse(HttpRequest request) {
 		HttpResponse<String> response = null;
 
 		try {

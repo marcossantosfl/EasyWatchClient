@@ -38,34 +38,7 @@ public class SplashController {
 						//sleep for few second
 						SystemThread.sleep(3000L);
 
-						//it has to be Platform otherwise will generate an error (javafx)
-						Platform.runLater(() -> {
-							Parent root = null;
-							//select screen, movies and series
-							try {
-								root = FXMLLoader.load(getClass().getResource("/view/select.fxml"));
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-
-							//load select screen
-							Scene scene1 = new Scene(root);
-
-							Stage secondStage = new Stage();
-
-							secondStage.initStyle(StageStyle.TRANSPARENT);
-							scene1.setFill(Color.TRANSPARENT);
-							secondStage.setTitle("Select");
-							secondStage.setResizable(false);
-							secondStage.setScene(scene1);
-							//close the first screen
-							SystemThread.primaryStage.close(); 
-							//show the second screen
-							secondStage.show();
-							//save the stage to close after
-							SystemThread.secondStage = secondStage;
-
-						});
+						loadSelect();
 
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -74,6 +47,37 @@ public class SplashController {
 				
 				this.interrupt();
 			}
+		}
+
+		private void loadSelect() {
+			//it has to be Platform otherwise will generate an error (javafx)
+			Platform.runLater(() -> {
+				Parent root = null;
+				//select screen, movies and series
+				try {
+					root = FXMLLoader.load(getClass().getResource("/view/select.fxml"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				//load select screen
+				Scene scene1 = new Scene(root);
+
+				Stage secondStage = new Stage();
+
+				secondStage.initStyle(StageStyle.TRANSPARENT);
+				scene1.setFill(Color.TRANSPARENT);
+				secondStage.setTitle("Select");
+				secondStage.setResizable(false);
+				secondStage.setScene(scene1);
+				//close the first screen
+				SystemThread.primaryStage.close(); 
+				//show the second screen
+				secondStage.show();
+				//save the stage to close after
+				SystemThread.secondStage = secondStage;
+
+			});
 		}
 	}
 
