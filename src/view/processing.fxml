@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="560.0" style="-fx-background-color: #03045e; -fx-background-radius: 60;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane layoutX="141.0" layoutY="27.0" prefHeight="200.0" prefWidth="300.0">
+         <center>
+            <ImageView fitHeight="131.0" fitWidth="212.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="/image/icons/easywatch.gif" />
+               </image>
+            </ImageView>
+         </center></BorderPane>
+      <ImageView fitHeight="160.0" fitWidth="237.0" layoutX="211.0" layoutY="252.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="/image/icons/ball.gif" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
