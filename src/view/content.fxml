@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="1360.0" style="-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 30;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContentController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="1360.0" style="-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 30;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ContentController">
    <children>
       <AnchorPane prefHeight="1069.0" prefWidth="229.0" style="-fx-background-radius: 30 0 0 30;">
          <children>
@@ -16,17 +16,12 @@
                   <Image url="/image/icons/wave.png" />
                </image>
             </ImageView>
-            <JFXButton fx:id="buttonHome" layoutX="7.0" layoutY="94.0" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 10;" text="HOME" textFill="WHITE">
+            <JFXButton fx:id="buttonWatch" onAction="#handleWatchAction" layoutX="7.0" layoutY="94.0" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 10;" text="WATCH" textFill="WHITE">
                <effect>
                   <DropShadow color="WHITE" height="10.0" radius="4.5" width="10.0" />
                </effect>
             </JFXButton>
-            <JFXButton fx:id="buttonSearch" layoutX="7.0" layoutY="138.0" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 10;" text="SEARCH" textFill="WHITE">
-               <effect>
-                  <DropShadow color="WHITE" height="10.0" radius="4.5" width="10.0" />
-               </effect>
-            </JFXButton>
-            <JFXButton fx:id="buttonPay" layoutX="7.0" layoutY="626.0" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 10;" text="0,00€" textFill="WHITE">
+            <JFXButton onAction="#handlePayAction" disable="true" fx:id="buttonPay" layoutX="7.0" layoutY="626.0" prefHeight="25.0" prefWidth="90.0" style="-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 10;" text="0,00€" textFill="WHITE">
                <effect>
                   <DropShadow color="WHITE" height="10.0" radius="4.5" width="10.0" />
                </effect>
@@ -56,9 +51,9 @@
                </effect>
             </JFXButton>
          </children></AnchorPane>
-      <GridPane fx:id="gridPane1" layoutX="194.0" layoutY="144.0" prefHeight="140.0" prefWidth="800.0" style="-fx-hgap: 30;">
+      <GridPane fx:id="gridPane1" layoutX="194.0" layoutY="144.0" prefHeight="140.0" prefWidth="800.0" style="-fx-hgap: 20;">
       </GridPane>
-      <GridPane fx:id="gridPane2" layoutX="194.0" layoutY="357.0" prefHeight="140.0" prefWidth="800.0" style="-fx-hgap: 30;">
+      <GridPane fx:id="gridPane2" layoutX="194.0" layoutY="357.0" prefHeight="140.0" prefWidth="800.0" style="-fx-hgap: 20;">
       </GridPane>
       <ImageView fx:id="arrowDownImg" fitHeight="60.0" fitWidth="60.0" layoutX="663.0" layoutY="578.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -70,5 +65,10 @@
             <Image url="/image/icons/up.png" />
          </image>
       </ImageView>
+            <JFXButton fx:id="buttonSwitch" layoutX="242.0" layoutY="23.0" onAction="#handleSwitchAction" prefHeight="25.0" prefWidth="221.0" style="-fx-background-color: linear-gradient(to bottom,#000000, #03045e); -fx-background-radius: 10;" text="SWITCH TO" textFill="WHITE">
+         <effect>
+            <DropShadow color="WHITE" height="10.0" radius="4.5" width="10.0" />
+         </effect>
+      </JFXButton>
    </children>
 </AnchorPane>

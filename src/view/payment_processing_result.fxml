@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="560.0" style="-fx-background-color: #03045e; -fx-background-radius: 60;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PaymentProcessingResultController">
+   <children>
+   <JFXButton fx:id="buttonClose" layoutX="490.0" layoutY="14.0" onAction="#handleCloseAction" text="X" textFill="WHITE" />
+      <BorderPane layoutX="141.0" layoutY="27.0" prefHeight="200.0" prefWidth="300.0">
+         <top>
+            <Label fx:id="labelCheckout" alignment="CENTER" prefHeight="30.0" prefWidth="250.0" text="CHECK-OUT AREA" textFill="WHITE" BorderPane.alignment="CENTER">
+      </Label>
+         </top>
+         <center>
+            <ImageView fitHeight="131.0" fitWidth="212.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@image/icons/easywatch.gif" />
+               </image>
+            </ImageView>
+         </center></BorderPane>
+      <BorderPane layoutX="120.0" layoutY="256.0" prefHeight="250.0" prefWidth="350.0">
+         <top>
+            <Label fx:id="labePaymentResult" alignment="CENTER" prefHeight="30.0" prefWidth="330.0" text="PAYMENT WAS" textFill="WHITE" BorderPane.alignment="CENTER" />
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>

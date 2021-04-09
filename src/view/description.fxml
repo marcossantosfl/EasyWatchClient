@@ -7,21 +7,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="560.0" style="-fx-background-color: #03045e; -fx-background-radius: 60;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DescriptionController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="560.0" style="-fx-background-color: #03045e; -fx-background-radius: 60;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DescriptionController">
    <children>
-      <BorderPane layoutX="51.0" layoutY="39.0">
-         <bottom>
-            <JFXTextArea fx:id="textPopUp" editable="false" focusColor="WHITE" style="-fx-text-fill: #fff;" text="" unFocusColor="#FFFFFF" wrapText="true" BorderPane.alignment="CENTER" />
-         </bottom>
+      <JFXButton fx:id="buttonClose" layoutX="490.0" layoutY="14.0" onAction="#handleCloseAction" text="X" textFill="WHITE" />
+      <BorderPane layoutX="95.0" layoutY="27.0" prefHeight="494.0" prefWidth="371.0">
+         <top>
+            <Label fx:id="titleLabel" alignment="CENTER" prefHeight="75.0" prefWidth="200.0" textFill="WHITE" BorderPane.alignment="CENTER">
+      </Label>
+         </top>
          <center>
             <ImageView fx:id="imagePopUp" fitHeight="244.0" fitWidth="196.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
       </ImageView>
          </center>
-         <top>
-            <Label fx:id="titleLabel" alignment="CENTER" prefHeight="75.0" prefWidth="150.0" textFill="WHITE" BorderPane.alignment="CENTER">
-      </Label>
-         </top>
+         <bottom>
+            <JFXTextArea fx:id="textPopUp" editable="false" focusColor="WHITE" style="-fx-text-fill: #fff;" unFocusColor="#FFFFFF" wrapText="true" BorderPane.alignment="CENTER" />
+         </bottom>
       </BorderPane>
-      <JFXButton fx:id="buttonClose" layoutX="490.0" layoutY="14.0" onAction="#handleCloseAction" text="X" textFill="WHITE" />
    </children>
 </AnchorPane>
